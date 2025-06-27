@@ -14,158 +14,198 @@
             <button id="adminBtn" class="admin-btn">관리자 모드</button>
         </header>
 
-        <div class="calculator-section">
-            <div class="input-group">
-                <label for="area">면적 (평)</label>
-                <input type="number" id="area" placeholder="면적을 입력하세요" min="1" step="0.1">
-            </div>
-
-            <div class="categories">
-                <div class="category">
+        <main>
+            <div class="calculator-section">
+                <div class="item-group">
                     <h3>바닥재</h3>
-                    <div class="option-group">
-                        <label><input type="checkbox" data-category="floor" data-item="타일" data-price="50000"> 타일 (평당 5만원)</label>
-                        <label><input type="checkbox" data-category="floor" data-item="마루" data-price="80000"> 마루 (평당 8만원)</label>
-                        <label><input type="checkbox" data-category="floor" data-item="리놀륨" data-price="30000"> 리놀륨 (평당 3만원)</label>
+                    <div class="input-group">
+                        <label>평수:</label>
+                        <input type="number" id="floorArea" min="0" step="0.1" placeholder="평수 입력">
+                        <span class="unit">평</span>
+                        <span class="price-per-unit" id="floorPricePerUnit">50,000원/평</span>
                     </div>
                 </div>
 
-                <div class="category">
+                <div class="item-group">
                     <h3>벽지</h3>
-                    <div class="option-group">
-                        <label><input type="checkbox" data-category="wall" data-item="일반벽지" data-price="20000"> 일반벽지 (평당 2만원)</label>
-                        <label><input type="checkbox" data-category="wall" data-item="실크벽지" data-price="35000"> 실크벽지 (평당 3.5만원)</label>
-                        <label><input type="checkbox" data-category="wall" data-item="페인트" data-price="15000"> 페인트 (평당 1.5만원)</label>
+                    <div class="input-group">
+                        <label>평수:</label>
+                        <input type="number" id="wallArea" min="0" step="0.1" placeholder="평수 입력">
+                        <span class="unit">평</span>
+                        <span class="price-per-unit" id="wallPricePerUnit">30,000원/평</span>
                     </div>
                 </div>
 
-                <div class="category">
-                    <h3>조명</h3>
-                    <div class="option-group">
-                        <label><input type="checkbox" data-category="lighting" data-item="LED조명" data-price="100000"> LED조명 (개당 10만원)</label>
-                        <label><input type="checkbox" data-category="lighting" data-item="샹들리에" data-price="300000"> 샹들리에 (개당 30만원)</label>
-                        <label><input type="checkbox" data-category="lighting" data-item="스포트라이트" data-price="50000"> 스포트라이트 (개당 5만원)</label>
+                <div class="item-group">
+                    <h3>타일</h3>
+                    <div class="input-group">
+                        <label>평수:</label>
+                        <input type="number" id="tileArea" min="0" step="0.1" placeholder="평수 입력">
+                        <span class="unit">평</span>
+                        <span class="price-per-unit" id="tilePricePerUnit">80,000원/평</span>
                     </div>
                 </div>
 
-                <div class="category">
-                    <h3>시공비</h3>
-                    <div class="option-group">
-                        <label><input type="checkbox" data-category="construction" data-item="기본시공" data-price="200000"> 기본시공 (평당 20만원)</label>
-                        <label><input type="checkbox" data-category="construction" data-item="고급시공" data-price="350000"> 고급시공 (평당 35만원)</label>
+                <div class="item-group">
+                    <h3>도배</h3>
+                    <div class="input-group">
+                        <label>평수:</label>
+                        <input type="number" id="paintArea" min="0" step="0.1" placeholder="평수 입력">
+                        <span class="unit">평</span>
+                        <span class="price-per-unit" id="paintPricePerUnit">25,000원/평</span>
                     </div>
+                </div>
+
+                <div class="item-group">
+                    <h3>샷시</h3>
+                    <div class="input-group">
+                        <label>개수:</label>
+                        <input type="number" id="windowCount" min="0" step="1" placeholder="개수 입력">
+                        <span class="unit">개</span>
+                        <span class="price-per-unit" id="windowPricePerUnit">150,000원/개</span>
+                    </div>
+                </div>
+
+                <div class="item-group">
+                    <h3>섬 공사</h3>
+                    <div class="input-group">
+                        <label>일수:</label>
+                        <input type="number" id="islandDays" min="0" step="1" placeholder="일수 입력">
+                        <span class="unit">일</span>
+                        <span class="price-per-unit" id="islandPricePerUnit">300,000원/일</span>
+                    </div>
+                </div>
+
+                <div class="item-group">
+                    <h3>전기 공사</h3>
+                    <div class="input-group">
+                        <label>평수:</label>
+                        <input type="number" id="electricArea" min="0" step="0.1" placeholder="평수 입력">
+                        <span class="unit">평</span>
+                        <span class="price-per-unit" id="electricPricePerUnit">120,000원/평</span>
+                    </div>
+                </div>
+
+                <div class="total-section">
+                    <h2>총 예상 견적: <span id="totalPrice">0원</span></h2>
+                    <button id="calculateBtn" class="calculate-btn">견적 계산하기</button>
                 </div>
             </div>
-
-            <div class="result-section">
-                <div class="total-price">
-                    <h2>총 예상 견적: <span id="totalAmount">0</span>원</h2>
-                </div>
-                <button id="calculateBtn" class="calculate-btn">견적 계산하기</button>
-            </div>
-        </div>
+        </main>
     </div>
 
-    <!-- 관리자 모달 -->
+    <!-- 관리자 모드 모달 -->
     <div id="adminModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>관리자 로그인</h2>
-            <form id="adminLogin">
-                <div class="input-group">
-                    <label for="adminId">아이디</label>
-                    <input type="text" id="adminId" placeholder="아이디를 입력하세요" required>
+            <div class="modal-header">
+                <h2>관리자 로그인</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="login-form">
+                    <div class="input-group">
+                        <label>아이디:</label>
+                        <input type="text" id="adminId" placeholder="아이디 입력">
+                    </div>
+                    <div class="input-group">
+                        <label>비밀번호:</label>
+                        <input type="password" id="adminPassword" placeholder="비밀번호 입력">
+                    </div>
+                    <button id="loginBtn" class="login-btn">로그인</button>
                 </div>
-                <div class="input-group">
-                    <label for="adminPassword">비밀번호</label>
-                    <input type="password" id="adminPassword" placeholder="비밀번호를 입력하세요" required>
-                </div>
-                <button type="submit" class="login-btn">로그인</button>
-            </form>
+            </div>
         </div>
     </div>
 
     <!-- 관리자 설정 모달 -->
     <div id="adminSettingsModal" class="modal">
         <div class="modal-content admin-settings">
-            <span class="close-settings">&times;</span>
-            <h2>가격 설정</h2>
-            <div class="price-settings">
-                <div class="setting-group">
-                    <h3>바닥재</h3>
-                    <div class="price-item">
-                        <label>타일</label>
-                        <input type="number" id="price-타일" value="50000">
-                        <span>원/평</span>
-                    </div>
-                    <div class="price-item">
-                        <label>마루</label>
-                        <input type="number" id="price-마루" value="80000">
-                        <span>원/평</span>
-                    </div>
-                    <div class="price-item">
-                        <label>리놀륨</label>
-                        <input type="number" id="price-리놀륨" value="30000">
-                        <span>원/평</span>
-                    </div>
-                </div>
-
-                <div class="setting-group">
-                    <h3>벽지</h3>
-                    <div class="price-item">
-                        <label>일반벽지</label>
-                        <input type="number" id="price-일반벽지" value="20000">
-                        <span>원/평</span>
-                    </div>
-                    <div class="price-item">
-                        <label>실크벽지</label>
-                        <input type="number" id="price-실크벽지" value="35000">
-                        <span>원/평</span>
-                    </div>
-                    <div class="price-item">
-                        <label>페인트</label>
-                        <input type="number" id="price-페인트" value="15000">
-                        <span>원/평</span>
-                    </div>
-                </div>
-
-                <div class="setting-group">
-                    <h3>조명</h3>
-                    <div class="price-item">
-                        <label>LED조명</label>
-                        <input type="number" id="price-LED조명" value="100000">
-                        <span>원/개</span>
-                    </div>
-                    <div class="price-item">
-                        <label>샹들리에</label>
-                        <input type="number" id="price-샹들리에" value="300000">
-                        <span>원/개</span>
-                    </div>
-                    <div class="price-item">
-                        <label>스포트라이트</label>
-                        <input type="number" id="price-스포트라이트" value="50000">
-                        <span>원/개</span>
-                    </div>
-                </div>
-
-                <div class="setting-group">
-                    <h3>시공비</h3>
-                    <div class="price-item">
-                        <label>기본시공</label>
-                        <input type="number" id="price-기본시공" value="200000">
-                        <span>원/평</span>
-                    </div>
-                    <div class="price-item">
-                        <label>고급시공</label>
-                        <input type="number" id="price-고급시공" value="350000">
-                        <span>원/평</span>
-                    </div>
-                </div>
+            <div class="modal-header">
+                <h2>관리자 설정</h2>
+                <span class="close">&times;</span>
             </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>단가 설정</h3>
+                    <div class="price-settings">
+                        <div class="price-item">
+                            <label>바닥재 이름:</label>
+                            <input type="text" id="floorName" value="바닥재">
+                            <label>단가:</label>
+                            <input type="number" id="floorPrice" value="50000">
+                            <span>원/평</span>
+                        </div>
+                        <div class="price-item">
+                            <label>벽지 이름:</label>
+                            <input type="text" id="wallName" value="벽지">
+                            <label>단가:</label>
+                            <input type="number" id="wallPrice" value="30000">
+                            <span>원/평</span>
+                        </div>
+                        <div class="price-item">
+                            <label>타일 이름:</label>
+                            <input type="text" id="tileName" value="타일">
+                            <label>단가:</label>
+                            <input type="number" id="tilePrice" value="80000">
+                            <span>원/평</span>
+                        </div>
+                        <div class="price-item">
+                            <label>도배 이름:</label>
+                            <input type="text" id="paintName" value="도배">
+                            <label>단가:</label>
+                            <input type="number" id="paintPrice" value="25000">
+                            <span>원/평</span>
+                        </div>
+                        <div class="price-item">
+                            <label>샷시 이름:</label>
+                            <input type="text" id="windowName" value="샷시">
+                            <label>단가:</label>
+                            <input type="number" id="windowPrice" value="150000">
+                            <span>원/개</span>
+                        </div>
+                        <div class="price-item">
+                            <label>섬 공사 이름:</label>
+                            <input type="text" id="islandName" value="섬 공사">
+                            <label>단가:</label>
+                            <input type="number" id="islandPrice" value="300000">
+                            <span>원/일</span>
+                        </div>
+                        <div class="price-item">
+                            <label>전기 공사 이름:</label>
+                            <input type="text" id="electricName" value="전기 공사">
+                            <label>단가:</label>
+                            <input type="number" id="electricPrice" value="120000">
+                            <span>원/평</span>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="admin-actions">
-                <button id="savePrices" class="save-btn">가격 저장</button>
-                <button id="resetPrices" class="reset-btn">기본값으로 재설정</button>
+                <div class="settings-section">
+                    <h3>관리자 계정 관리</h3>
+                    <div class="admin-management">
+                        <div class="admin-list">
+                            <h4>현재 관리자 목록</h4>
+                            <ul id="adminList"></ul>
+                        </div>
+                        <div class="admin-add">
+                            <h4>관리자 추가</h4>
+                            <div class="input-group">
+                                <label>아이디:</label>
+                                <input type="text" id="newAdminId" placeholder="새 관리자 아이디">
+                            </div>
+                            <div class="input-group">
+                                <label>비밀번호:</label>
+                                <input type="password" id="newAdminPassword" placeholder="새 관리자 비밀번호">
+                            </div>
+                            <button id="addAdminBtn" class="add-btn">관리자 추가</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-actions">
+                    <button id="saveSettingsBtn" class="save-btn">설정 저장</button>
+                    <button id="logoutBtn" class="logout-btn">로그아웃</button>
+                </div>
             </div>
         </div>
     </div>
