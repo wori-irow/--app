@@ -1,536 +1,64 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>인테리어 예상 견적 계산기</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            padding: 30px;
-            text-align: center;
-            color: white;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .content {
-            padding: 30px;
-        }
-
-        .admin-section {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            border: 2px dashed #dee2e6;
-        }
-
-        .admin-toggle {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-bottom: 15px;
-        }
-
-        .admin-toggle:hover {
-            background: #5a6268;
-        }
-
-        .admin-panel {
-            display: none;
-        }
-
-        .admin-panel.active {
-            display: block;
-        }
-
-        .price-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .price-item {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .price-item label {
-            font-weight: bold;
-            color: #495057;
-        }
-
-        .price-item input {
-            padding: 8px 12px;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .calculator-section {
-            background: #fff;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #495057;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #4facfe;
-        }
-
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 10px;
-        }
-
-        .checkbox-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 5px;
-        }
-
-        .checkbox-item input[type="checkbox"] {
-            width: auto;
-            margin: 0;
-        }
-
-        .calculate-btn {
-            width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .calculate-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .result {
-            margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-            border-radius: 10px;
-            display: none;
-        }
-
-        .result.show {
-            display: block;
-        }
-
-        .result h3 {
-            color: #495057;
-            margin-bottom: 15px;
-        }
-
-        .price-breakdown {
-            display: grid;
-            gap: 10px;
-        }
-
-        .price-item-result {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .total-price {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #dc3545;
-            text-align: center;
-            margin-top: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-        }
-
-        .save-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 15px;
-        }
-
-        .save-btn:hover {
-            background: #218838;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                border-radius: 10px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .content {
-                padding: 20px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>인테리어 견적 계산기</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🏠 인테리어 예상 견적 계산기</h1>
-            <p>간편하게 인테리어 비용을 계산해보세요</p>
-        </div>
+  <header>
+    <h1>인테리어 견적 계산기</h1>
+  </header>
 
-        <div class="content">
-            <!-- 관리자 패널 -->
-            <div class="admin-section">
-                <button class="admin-toggle" onclick="toggleAdminPanel()">⚙️ 가격 설정 관리</button>
-                <div class="admin-panel" id="adminPanel">
-                    <h3>💰 단가 설정</h3>
-                    <div class="price-grid">
-                        <div class="price-item">
-                            <label>평당 기본 시공비 (만원)</label>
-                            <input type="number" id="pricePerPyeong" value="300" min="0">
-                        </div>
-                        <div class="price-item">
-                            <label>벽지 교체 (만원/평)</label>
-                            <input type="number" id="wallpaperPrice" value="15" min="0">
-                        </div>
-                        <div class="price-item">
-                            <label>바닥재 교체 (만원/평)</label>
-                            <input type="number" id="flooringPrice" value="25" min="0">
-                        </div>
-                        <div class="price-item">
-                            <label>페인트 작업 (만원/평)</label>
-                            <input type="number" id="paintPrice" value="8" min="0">
-                        </div>
-                        <div class="price-item">
-                            <label>주방 리모델링 (만원)</label>
-                            <input type="number" id="kitchenPrice" value="500" min="0">
-                        </div>
-                        <div class="price-item">
-                            <label>화장실 리모델링 (만원)</label>
-                            <input type="number" id="bathroomPrice" value="400" min="0">
-                        </div>
-                        <div class="price-item">
-                            <label>조명 교체 (만원/개)</label>
-                            <input type="number" id="lightingPrice" value="20" min="0">
-                        </div>
-                        <div class="price-item">
-                            <label>에어컨 설치 (만원/대)</label>
-                            <input type="number" id="airconPrice" value="80" min="0">
-                        </div>
-                    </div>
-                    <button class="save-btn" onclick="savePrices()">💾 가격 저장</button>
-                </div>
-            </div>
+  <main>
+    <section class="input-area">
+      <label for="buildingType">건물 유형:</label>
+      <select id="buildingType">
+        <option value="" disabled selected>선택하세요</option>
+        <option value="house">주택</option>
+        <option value="apartment">아파트</option>
+      </select>
 
-            <!-- 계산기 섹션 -->
-            <div class="calculator-section">
-                <h2>📏 공간 정보</h2>
-                <div class="form-group">
-                    <label for="area">면적 (평)</label>
-                    <input type="number" id="area" placeholder="예: 32" min="1" step="0.1">
-                </div>
+      <label for="workType">공사 유형:</label>
+      <select id="workType">
+        <option value="" disabled selected>선택하세요</option>
+        <option value="remodeling">리모델링</option>
+        <option value="construction_remodeling">건축+리모델링</option>
+      </select>
 
-                <div class="form-group">
-                    <label for="interiorType">인테리어 유형</label>
-                    <select id="interiorType">
-                        <option value="partial">부분 리모델링</option>
-                        <option value="full">전체 리모델링</option>
-                        <option value="premium">프리미엄 리모델링</option>
-                    </select>
-                </div>
+      <label for="area">면적 (㎡):</label>
+      <input type="number" id="area" min="0" placeholder="예: 100" />
 
-                <h3>🔨 추가 작업 선택</h3>
-                <div class="checkbox-group">
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="wallpaper" value="wallpaper">
-                        <label for="wallpaper">벽지 교체</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="flooring" value="flooring">
-                        <label for="flooring">바닥재 교체</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="paint" value="paint">
-                        <label for="paint">페인트 작업</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="kitchen" value="kitchen">
-                        <label for="kitchen">주방 리모델링</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="bathroom" value="bathroom">
-                        <label for="bathroom">화장실 리모델링</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="lighting" value="lighting">
-                        <label for="lighting">조명 교체</label>
-                    </div>
-                    <div class="checkbox-item">
-                        <input type="checkbox" id="aircon" value="aircon">
-                        <label for="aircon">에어컨 설치</label>
-                    </div>
-                </div>
+      <label for="category">항목 선택:</label>
+      <select id="category">
+        <option value="" disabled selected>선택하세요</option>
+        <option value="wallpaper">도배</option>
+        <option value="flooring">바닥재</option>
+        <option value="ceiling">천장</option>
+        <option value="molding">몰딩</option>
+        <option value="lighting">조명</option>
+        <option value="electric">전기</option>
+        <option value="woodwork">목공</option>
+        <option value="door">문 교체</option>
+        <option value="bathroom">욕실 리모델링</option>
+        <option value="sash">샷시</option>
+      </select>
 
-                <div class="form-group">
-                    <label for="lightingCount">조명 개수</label>
-                    <input type="number" id="lightingCount" value="5" min="0">
-                </div>
+      <label for="material">자재 단가 (원/㎡):</label>
+      <input type="number" id="materialPrice" min="0" placeholder="예: 10000" />
 
-                <div class="form-group">
-                    <label for="airconCount">에어컨 대수</label>
-                    <input type="number" id="airconCount" value="1" min="0">
-                </div>
+      <button id="addEstimate">견적 항목 추가</button>
+    </section>
 
-                <button class="calculate-btn" onclick="calculateEstimate()">💰 견적 계산하기</button>
-            </div>
+    <section class="estimate-list">
+      <h2>견적 리스트</h2>
+      <ul id="estimateItems"></ul>
+      <div class="total-price">총 견적 금액: <span id="totalPrice">0</span> 원</div>
+      <button id="clearAll">초기화</button>
+    </section>
+  </main>
 
-            <!-- 결과 섹션 -->
-            <div class="result" id="result">
-                <h3>📊 예상 견적 내역</h3>
-                <div class="price-breakdown" id="breakdown"></div>
-                <div class="total-price" id="totalPrice"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 가격 데이터를 로컬 스토리지에서 로드
-        function loadPrices() {
-            const savedPrices = localStorage.getItem('interiorPrices');
-            if (savedPrices) {
-                const prices = JSON.parse(savedPrices);
-                document.getElementById('pricePerPyeong').value = prices.pricePerPyeong || 300;
-                document.getElementById('wallpaperPrice').value = prices.wallpaperPrice || 15;
-                document.getElementById('flooringPrice').value = prices.flooringPrice || 25;
-                document.getElementById('paintPrice').value = prices.paintPrice || 8;
-                document.getElementById('kitchenPrice').value = prices.kitchenPrice || 500;
-                document.getElementById('bathroomPrice').value = prices.bathroomPrice || 400;
-                document.getElementById('lightingPrice').value = prices.lightingPrice || 20;
-                document.getElementById('airconPrice').value = prices.airconPrice || 80;
-            }
-        }
-
-        // 가격 저장
-        function savePrices() {
-            const prices = {
-                pricePerPyeong: parseInt(document.getElementById('pricePerPyeong').value),
-                wallpaperPrice: parseInt(document.getElementById('wallpaperPrice').value),
-                flooringPrice: parseInt(document.getElementById('flooringPrice').value),
-                paintPrice: parseInt(document.getElementById('paintPrice').value),
-                kitchenPrice: parseInt(document.getElementById('kitchenPrice').value),
-                bathroomPrice: parseInt(document.getElementById('bathroomPrice').value),
-                lightingPrice: parseInt(document.getElementById('lightingPrice').value),
-                airconPrice: parseInt(document.getElementById('airconPrice').value)
-            };
-            
-            localStorage.setItem('interiorPrices', JSON.stringify(prices));
-            alert('가격이 저장되었습니다! 💾');
-        }
-
-        // 관리자 패널 토글
-        function toggleAdminPanel() {
-            const panel = document.getElementById('adminPanel');
-            panel.classList.toggle('active');
-        }
-
-        // 현재 가격 가져오기
-        function getCurrentPrices() {
-            return {
-                pricePerPyeong: parseInt(document.getElementById('pricePerPyeong').value),
-                wallpaperPrice: parseInt(document.getElementById('wallpaperPrice').value),
-                flooringPrice: parseInt(document.getElementById('flooringPrice').value),
-                paintPrice: parseInt(document.getElementById('paintPrice').value),
-                kitchenPrice: parseInt(document.getElementById('kitchenPrice').value),
-                bathroomPrice: parseInt(document.getElementById('bathroomPrice').value),
-                lightingPrice: parseInt(document.getElementById('lightingPrice').value),
-                airconPrice: parseInt(document.getElementById('airconPrice').value)
-            };
-        }
-
-        // 견적 계산
-        function calculateEstimate() {
-            const area = parseFloat(document.getElementById('area').value);
-            const interiorType = document.getElementById('interiorType').value;
-            const lightingCount = parseInt(document.getElementById('lightingCount').value);
-            const airconCount = parseInt(document.getElementById('airconCount').value);
-
-            if (!area || area <= 0) {
-                alert('올바른 면적을 입력해주세요! 📏');
-                return;
-            }
-
-            const prices = getCurrentPrices();
-            let breakdown = [];
-            let total = 0;
-
-            // 기본 시공비
-            let basePrice = prices.pricePerPyeong * area;
-            
-            // 인테리어 유형별 배율
-            const typeMultiplier = {
-                'partial': 0.7,
-                'full': 1.0,
-                'premium': 1.5
-            };
-            
-            basePrice *= typeMultiplier[interiorType];
-            breakdown.push({ name: '기본 시공비', price: basePrice });
-            total += basePrice;
-
-            // 추가 작업들
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            checkboxes.forEach(checkbox => {
-                let price = 0;
-                let name = '';
-                
-                switch(checkbox.value) {
-                    case 'wallpaper':
-                        price = prices.wallpaperPrice * area;
-                        name = '벽지 교체';
-                        break;
-                    case 'flooring':
-                        price = prices.flooringPrice * area;
-                        name = '바닥재 교체';
-                        break;
-                    case 'paint':
-                        price = prices.paintPrice * area;
-                        name = '페인트 작업';
-                        break;
-                    case 'kitchen':
-                        price = prices.kitchenPrice;
-                        name = '주방 리모델링';
-                        break;
-                    case 'bathroom':
-                        price = prices.bathroomPrice;
-                        name = '화장실 리모델링';
-                        break;
-                    case 'lighting':
-                        price = prices.lightingPrice * lightingCount;
-                        name = `조명 교체 (${lightingCount}개)`;
-                        break;
-                    case 'aircon':
-                        price = prices.airconPrice * airconCount;
-                        name = `에어컨 설치 (${airconCount}대)`;
-                        break;
-                }
-                
-                if (price > 0) {
-                    breakdown.push({ name, price });
-                    total += price;
-                }
-            });
-
-            // 결과 표시
-            displayResult(breakdown, total, area, interiorType);
-        }
-
-        // 결과 표시
-        function displayResult(breakdown, total, area, interiorType) {
-            const typeNames = {
-                'partial': '부분 리모델링',
-                'full': '전체 리모델링',
-                'premium': '프리미엄 리모델링'
-            };
-
-            let breakdownHTML = `
-                <div class="price-item-result">
-                    <span><strong>📏 면적:</strong> ${area}평</span>
-                    <span><strong>🏠 유형:</strong> ${typeNames[interiorType]}</span>
-                </div>
-            `;
-
-            breakdown.forEach(item => {
-                breakdownHTML += `
-                    <div class="price-item-result">
-                        <span>${item.name}</span>
-                        <span><strong>${item.price.toLocaleString()}만원</strong></span>
-                    </div>
-                `;
-            });
-
-            document.getElementById('breakdown').innerHTML = breakdownHTML;
-            document.getElementById('totalPrice').innerHTML = `
-                총 예상 견적: <span style="color: #dc3545;">${total.toLocaleString()}만원</span>
-                <br><small style="font-size: 0.8em; color: #6c757d;">* 실제 견적은 현장 상황에 따라 달라질 수 있습니다</small>
-            `;
-            
-            document.getElementById('result').classList.add('show');
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // 페이지 로드시 저장된 가격 불러오기
-        window.onload = function() {
-            loadPrices();
-        };
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
