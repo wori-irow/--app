@@ -9,199 +9,225 @@
 </head>
 <body>
     <div class="container">
-        <header>
+        <!-- 헤더 -->
+        <header class="header">
             <h1>🏠 인테리어 견적 계산기</h1>
-            <button id="adminModeBtn" class="admin-btn">관리자 모드</button>
+            <button id="adminBtn" class="admin-btn">관리자 모드</button>
         </header>
 
-        <!-- 관리자 패널 (초기에는 숨김) -->
-        <div id="adminPanel" class="admin-panel hidden">
-            <div class="admin-header">
-                <h2>🔧 관리자 모드</h2>
-                <div class="admin-controls">
-                    <button id="changePasswordBtn" class="btn-secondary">비밀번호 변경</button>
-                    <button id="exitAdminBtn" class="btn-secondary">관리자 모드 종료</button>
+        <!-- 메인 컨텐츠 -->
+        <div class="main-content">
+            <!-- 입력 폼 -->
+            <div class="form-section">
+                <h2>견적 정보 입력</h2>
+                
+                <!-- 기본 정보 -->
+                <div class="form-group">
+                    <label for="workDays">공사기간 (일):</label>
+                    <input type="number" id="workDays" min="1" value="1" class="form-input">
                 </div>
-            </div>
-            <div class="admin-content">
-                <h3>단가 설정</h3>
-                <div id="priceSettings" class="price-settings"></div>
-            </div>
-        </div>
 
-        <main>
-            <div class="input-section">
-                <!-- 도배 -->
-                <div class="item-group">
-                    <h3>🎨 도배</h3>
-                    <div class="input-row">
-                        <select id="wallpaperType">
-                            <option value="">선택하세요</option>
-                            <option value="silk">실크</option>
-                            <option value="synthetic">합지</option>
-                        </select>
-                        <input type="number" id="wallpaperArea" placeholder="평수" min="0" step="0.1">
-                        <span>평</span>
+                <!-- 평당 계산 항목들 -->
+                <div class="category-group">
+                    <h3>평당 계산 항목</h3>
+                    
+                    <div class="form-group">
+                        <label for="demolition">철거 (평):</label>
+                        <input type="number" id="demolition" min="0" step="0.1" value="0" class="form-input">
                     </div>
-                </div>
 
-                <!-- 바닥재 -->
-                <div class="item-group">
-                    <h3>🔲 바닥재</h3>
-                    <div class="input-row">
-                        <select id="flooringType">
-                            <option value="">선택하세요</option>
-                            <option value="hardwood">강마루</option>
-                            <option value="vinyl">장판</option>
-                        </select>
-                        <input type="number" id="flooringArea" placeholder="평수" min="0" step="0.1">
-                        <span>평</span>
+                    <div class="form-group">
+                        <label for="carpentry">목공 (평):</label>
+                        <input type="number" id="carpentry" min="0" step="0.1" value="0" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="electrical">전기공사 (평):</label>
+                        <input type="number" id="electrical" min="0" step="0.1" value="0" class="form-input">
                     </div>
                 </div>
 
-                <!-- 천장 -->
-                <div class="item-group">
-                    <h3>🏠 천장</h3>
-                    <div class="input-row">
-                        <select id="ceilingType">
-                            <option value="">선택하세요</option>
-                            <option value="normal">일반</option>
-                            <option value="fireproof">방염</option>
-                        </select>
-                        <input type="number" id="ceilingArea" placeholder="평수" min="0" step="0.1">
-                        <span>평</span>
+                <!-- 개별 계산 항목들 -->
+                <div class="category-group">
+                    <h3>개별 계산 항목</h3>
+                    
+                    <div class="form-group">
+                        <label for="wallpaper">도배 (개수):</label>
+                        <input type="number" id="wallpaper" min="0" value="0" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="window">샷시 (개수):</label>
+                        <input type="number" id="window" min="0" value="0" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lighting">조명 (개수):</label>
+                        <input type="number" id="lighting" min="0" value="0" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="molding">몰딩 (미터):</label>
+                        <input type="number" id="molding" min="0" step="0.1" value="0" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="flooring">바닥재 (평):</label>
+                        <input type="number" id="flooring" min="0" step="0.1" value="0" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="door">문교체 (개수):</label>
+                        <input type="number" id="door" min="0" value="0" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bathroom">욕실 (개수):</label>
+                        <input type="number" id="bathroom" min="0" value="0" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="aircon">에어컨 (개수):</label>
+                        <input type="number" id="aircon" min="0" value="0" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="facility">설비 (개수):</label>
+                        <input type="number" id="facility" min="0" value="0" class="form-input">
                     </div>
                 </div>
 
-                <!-- 몰딩 -->
-                <div class="item-group">
-                    <h3>📐 몰딩</h3>
-                    <div class="input-row">
-                        <select id="moldingType">
-                            <option value="">선택하세요</option>
-                            <option value="normal">일반</option>
-                            <option value="premium">고급</option>
-                        </select>
-                        <input type="number" id="moldingLength" placeholder="미터" min="0" step="0.1">
-                        <span>m</span>
+                <!-- 특수 항목들 -->
+                <div class="category-group">
+                    <h3>특수 항목</h3>
+                    
+                    <div class="form-group">
+                        <label for="islandWork">
+                            <input type="checkbox" id="islandWork"> 섬 공사
+                        </label>
+                        <input type="number" id="islandDays" min="0" value="0" placeholder="일수" class="form-input" disabled>
                     </div>
-                </div>
 
-                <!-- 조명 -->
-                <div class="item-group">
-                    <h3>💡 조명</h3>
-                    <div class="input-row">
-                        <input type="number" id="lightingCount" placeholder="개수" min="0">
-                        <span>개</span>
-                    </div>
-                </div>
-
-                <!-- 전기공사 -->
-                <div class="item-group">
-                    <h3>⚡ 전기공사</h3>
-                    <div class="input-row">
-                        <input type="number" id="outletCount" placeholder="콘센트 수" min="0">
-                        <span>개</span>
-                    </div>
-                    <div class="input-row">
-                        <input type="number" id="switchCount" placeholder="스위치 수" min="0">
-                        <span>개</span>
-                    </div>
-                    <div class="input-row">
-                        <input type="number" id="electricalArea" placeholder="평수" min="0" step="0.1">
-                        <span>평</span>
-                    </div>
-                </div>
-
-                <!-- 목공 -->
-                <div class="item-group">
-                    <h3>🔨 목공</h3>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" id="partitionWall"> 가벽 시공</label>
-                        <label><input type="checkbox" id="doorFrameRepair"> 문틀 보수</label>
-                    </div>
-                </div>
-
-                <!-- 문 교체 -->
-                <div class="item-group">
-                    <h3>🚪 문 교체</h3>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" id="roomDoor"> 방문</label>
-                        <label><input type="checkbox" id="entranceDoor"> 현관문</label>
-                    </div>
-                </div>
-
-                <!-- 욕실 리모델링 -->
-                <div class="item-group">
-                    <h3>🚿 욕실 리모델링</h3>
-                    <div class="input-row">
-                        <select id="bathroomType">
-                            <option value="">선택하세요</option>
-                            <option value="full">전체</option>
-                            <option value="partial">부분</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- 샷시 -->
-                <div class="item-group">
-                    <h3>🪟 샷시</h3>
-                    <div class="input-row">
-                        <select id="windowType">
-                            <option value="">선택하세요</option>
-                            <option value="room">방샷시</option>
-                            <option value="living">거실샷시</option>
-                        </select>
-                        <input type="number" id="windowCount" placeholder="창문 개수" min="0">
-                        <span>개</span>
-                    </div>
-                </div>
-
-                <!-- 섬 지역 시공 -->
-                <div class="item-group">
-                    <h3>🏝️ 섬 지역 시공</h3>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" id="islandWork"> 섬 지역 시공</label>
-                    </div>
-                    <div class="input-row hidden" id="stayDaysRow">
-                        <input type="number" id="stayDays" placeholder="체류 일수" min="1">
-                        <span>일</span>
+                    <div class="form-group">
+                        <label for="includeLaborCost">
+                            <input type="checkbox" id="includeLaborCost" checked> 기본 인건비 포함
+                        </label>
                     </div>
                 </div>
             </div>
 
             <!-- 견적 결과 -->
             <div class="result-section">
-                <h2>📋 견적 결과</h2>
-                <div class="table-container">
+                <h2>견적 결과</h2>
+                <div class="estimate-table">
                     <table id="estimateTable">
                         <thead>
                             <tr>
                                 <th>항목</th>
-                                <th>세부사항</th>
                                 <th>단가</th>
                                 <th>수량</th>
-                                <th>합계</th>
+                                <th>금액</th>
                             </tr>
                         </thead>
-                        <tbody id="estimateBody">
-                            <!-- 계산 결과가 여기에 동적으로 추가됩니다 -->
+                        <tbody id="estimateTableBody">
                         </tbody>
                         <tfoot>
                             <tr class="total-row">
-                                <td colspan="4"><strong>총 견적 금액</strong></td>
-                                <td><strong id="totalAmount">0원</strong></td>
+                                <td colspan="3"><strong>총 합계</strong></td>
+                                <td id="totalAmount"><strong>0원</strong></td>
                             </tr>
                         </tfoot>
                     </table>
                 </div>
 
                 <div class="action-buttons">
-                    <button id="copyEstimateBtn" class="btn-primary">📋 견적서 복사</button>
-                    <button id="saveAsPdfBtn" class="btn-primary">📄 PDF 저장</button>
+                    <button id="copyBtn" class="action-btn">견적서 복사</button>
+                    <button id="printBtn" class="action-btn">인쇄</button>
                 </div>
             </div>
-        </main>
+        </div>
+
+        <!-- 관리자 패널 -->
+        <div id="adminPanel" class="admin-panel" style="display: none;">
+            <div class="admin-content">
+                <h2>관리자 모드 - 단가 설정</h2>
+                <div class="admin-form">
+                    <div class="admin-group">
+                        <h3>평당 계산 항목</h3>
+                        <div class="admin-item">
+                            <label>철거 (평당):</label>
+                            <input type="number" id="admin-demolition" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>목공 (평당):</label>
+                            <input type="number" id="admin-carpentry" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>전기공사 (평당):</label>
+                            <input type="number" id="admin-electrical" class="admin-input">
+                        </div>
+                    </div>
+
+                    <div class="admin-group">
+                        <h3>개별 계산 항목</h3>
+                        <div class="admin-item">
+                            <label>도배 (개당):</label>
+                            <input type="number" id="admin-wallpaper" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>샷시 (개당):</label>
+                            <input type="number" id="admin-window" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>조명 (개당):</label>
+                            <input type="number" id="admin-lighting" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>몰딩 (미터당):</label>
+                            <input type="number" id="admin-molding" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>바닥재 (평당):</label>
+                            <input type="number" id="admin-flooring" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>문교체 (개당):</label>
+                            <input type="number" id="admin-door" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>욕실 (개당):</label>
+                            <input type="number" id="admin-bathroom" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>에어컨 (개당):</label>
+                            <input type="number" id="admin-aircon" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>설비 (개당):</label>
+                            <input type="number" id="admin-facility" class="admin-input">
+                        </div>
+                    </div>
+
+                    <div class="admin-group">
+                        <h3>특수 항목</h3>
+                        <div class="admin-item">
+                            <label>섬 공사 (일당):</label>
+                            <input type="number" id="admin-island" class="admin-input">
+                        </div>
+                        <div class="admin-item">
+                            <label>기본 인건비 (일당):</label>
+                            <input type="number" id="admin-labor" class="admin-input">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-buttons">
+                    <button id="saveBtn" class="save-btn">저장</button>
+                    <button id="changePasswordBtn" class="change-password-btn">비밀번호 변경</button>
+                    <button id="closeAdminBtn" class="close-btn">닫기</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
