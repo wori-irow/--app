@@ -1,311 +1,278 @@
 
-// 기본 관리자 정보
-const ADMIN_CREDENTIALS = {
-    id: 'suwon1234',
-    password: '1234'
+// 기본 데이터 구조
+let itemData = {
+    floor: { name: '바닥재', price: 50000, unit: '평' },
+    wall: { name: '벽지', price: 30000, unit: '평' },
+    tile: { name: '타일', price: 80000, unit: '평' },
+    paint: { name: '도배', price: 25000, unit: '평' },
+    window: { name: '샷시', price: 150000, unit: '개' },
+    island: { name: '섬 공사', price: 300000, unit: '일' },
+    electric: { name: '전기 공사', price: 120000, unit: '평' }
 };
 
-// 기본 가격 정보
-const DEFAULT_PRICES = {
-    '타일': 50000,
-    '마루': 80000,
-    '리놀륨': 30000,
-    '일반벽지': 20000,
-    '실크벽지': 35000,
-    '페인트': 15000,
-    'LED조명': 100000,
-    '샹들리에': 300000,
-    '스포트라이트': 50000,
-    '기본시공': 200000,
-    '고급시공': 350000
-};
+let adminAccounts = [
+    { id: 'suwon1234', password: '1234' }
+];
 
-// 현재 가격 정보 (로컬 스토리지에서 불러오거나 기본값 사용)
-let currentPrices = { ...DEFAULT_PRICES };
+let isLoggedIn = false;
 
-// DOM 요소들
-const adminBtn = document.getElementById('adminBtn');
-const adminModal = document.getElementById('adminModal');
-const adminSettingsModal = document.getElementById('adminSettingsModal');
-const closeModal = document.querySelector('.close');
-const closeSettingsModal = document.querySelector('.close-settings');
-const adminLoginForm = document.getElementById('adminLogin');
-const calculateBtn = document.getElementById('calculateBtn');
-const totalAmountElement = document.getElementById('totalAmount');
-const areaInput = document.getElementById('area');
-const savePricesBtn = document.getElementById('savePrices');
-const resetPricesBtn = document.getElementById('resetPrices');
-
-// 페이지 로드 시 초기화
-document.addEventListener('DOMContentLoaded', function() {
-    loadPricesFromStorage();
-    updatePriceLabels();
-    setupEventListeners();
-});
-
-// 이벤트 리스너 설정
-function setupEventListeners() {
-    adminBtn.addEventListener('click', () => {
-        adminModal.style.display = 'block';
-    });
-
-    closeModal.addEventListener('click', () => {
-        adminModal.style.display = 'none';
-    });
-
-    closeSettingsModal.addEventListener('click', () => {
-        adminSettingsModal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === adminModal) {
-            adminModal.style.display = 'none';
-        }
-        if (event.target === adminSettingsModal) {
-            adminSettingsModal.style.display = 'none';
-        }
-    });
-
-    adminLoginForm.addEventListener('submit', handleAdminLogin);
-    calculateBtn.addEventListener('click', calculateTotal);
-    savePricesBtn.addEventListener('click', savePrices);
-    resetPricesBtn.addEventListener('click', resetPrices);
-
-    // 실시간 계산을 위한 이벤트 리스너
-    areaInput.addEventListener('input', calculateTotal);
+// 로컬 스토리지에서 데이터 로드
+function loadData() {
+    const savedItemData = localStorage.getItem('interiorItemData');
+    const savedAdminAccounts = localStorage.getItem('interiorAdminAccounts');
     
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', calculateTotal);
-    });
+    if (savedItemData) {
+        itemData = JSON.parse(savedItemData);
+    }
+    
+    if (savedAdminAccounts) {
+        adminAccounts = JSON.parse(savedAdminAccounts);
+    }
+    
+    updatePriceDisplay();
 }
 
-// 관리자 로그인 처리
-function handleAdminLogin(event) {
-    event.preventDefault();
+// 로컬 스토리지에 데이터 저장
+function saveData() {
+    localStorage.setItem('interiorItemData', JSON.stringify(itemData));
+    localStorage.setItem('interiorAdminAccounts', JSON.stringify(adminAccounts));
+}
+
+// 가격 표시 업데이트
+function updatePriceDisplay() {
+    document.getElementById('floorPricePerUnit').textContent = `${itemData.floor.price.toLocaleString()}원/${itemData.floor.unit}`;
+    document.getElementById('wallPricePerUnit').textContent = `${itemData.wall.price.toLocaleString()}원/${itemData.wall.unit}`;
+    document.getElementById('tilePricePerUnit').textContent = `${itemData.tile.price.toLocaleString()}원/${itemData.tile.unit}`;
+    document.getElementById('paintPricePerUnit').textContent = `${itemData.paint.price.toLocaleString()}원/${itemData.paint.unit}`;
+    document.getElementById('windowPricePerUnit').textContent = `${itemData.window.price.toLocaleString()}원/${itemData.window.unit}`;
+    document.getElementById('islandPricePerUnit').textContent = `${itemData.island.price.toLocaleString()}원/${itemData.island.unit}`;
+    document.getElementById('electricPricePerUnit').textContent = `${itemData.electric.price.toLocaleString()}원/${itemData.electric.unit}`;
     
-    const id = document.getElementById('adminId').value;
-    const password = document.getElementById('adminPassword').value;
-    
-    if (id === ADMIN_CREDENTIALS.id && password === ADMIN_CREDENTIALS.password) {
-        adminModal.style.display = 'none';
-        adminSettingsModal.style.display = 'block';
-        
-        // 입력 필드 초기화
-        document.getElementById('adminId').value = '';
-        document.getElementById('adminPassword').value = '';
-        
-        // 현재 가격으로 설정창 업데이트
-        updateAdminSettings();
-        
-        showNotification('관리자 로그인 성공', 'success');
-    } else {
-        showNotification('아이디 또는 비밀번호가 올바르지 않습니다.', 'error');
-    }
+    // 항목 이름 업데이트
+    const itemGroups = document.querySelectorAll('.item-group h3');
+    itemGroups[0].textContent = itemData.floor.name;
+    itemGroups[1].textContent = itemData.wall.name;
+    itemGroups[2].textContent = itemData.tile.name;
+    itemGroups[3].textContent = itemData.paint.name;
+    itemGroups[4].textContent = itemData.window.name;
+    itemGroups[5].textContent = itemData.island.name;
+    itemGroups[6].textContent = itemData.electric.name;
 }
 
 // 견적 계산
 function calculateTotal() {
-    const area = parseFloat(areaInput.value) || 0;
-    if (area <= 0) {
-        totalAmountElement.textContent = '0';
+    const floorArea = parseFloat(document.getElementById('floorArea').value) || 0;
+    const wallArea = parseFloat(document.getElementById('wallArea').value) || 0;
+    const tileArea = parseFloat(document.getElementById('tileArea').value) || 0;
+    const paintArea = parseFloat(document.getElementById('paintArea').value) || 0;
+    const windowCount = parseInt(document.getElementById('windowCount').value) || 0;
+    const islandDays = parseInt(document.getElementById('islandDays').value) || 0;
+    const electricArea = parseFloat(document.getElementById('electricArea').value) || 0;
+    
+    const total = 
+        (floorArea * itemData.floor.price) +
+        (wallArea * itemData.wall.price) +
+        (tileArea * itemData.tile.price) +
+        (paintArea * itemData.paint.price) +
+        (windowCount * itemData.window.price) +
+        (islandDays * itemData.island.price) +
+        (electricArea * itemData.electric.price);
+    
+    document.getElementById('totalPrice').textContent = `${total.toLocaleString()}원`;
+    
+    // 계산 애니메이션
+    const totalElement = document.getElementById('totalPrice');
+    totalElement.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+        totalElement.style.transform = 'scale(1)';
+    }, 200);
+}
+
+// 관리자 로그인
+function adminLogin() {
+    const inputId = document.getElementById('adminId').value;
+    const inputPassword = document.getElementById('adminPassword').value;
+    
+    const validAdmin = adminAccounts.find(admin => 
+        admin.id === inputId && admin.password === inputPassword
+    );
+    
+    if (validAdmin) {
+        isLoggedIn = true;
+        document.getElementById('adminModal').style.display = 'none';
+        openAdminSettings();
+        
+        // 입력 필드 초기화
+        document.getElementById('adminId').value = '';
+        document.getElementById('adminPassword').value = '';
+    } else {
+        alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+    }
+}
+
+// 관리자 설정 모달 오픈
+function openAdminSettings() {
+    // 현재 설정값으로 폼 초기화
+    document.getElementById('floorName').value = itemData.floor.name;
+    document.getElementById('floorPrice').value = itemData.floor.price;
+    document.getElementById('wallName').value = itemData.wall.name;
+    document.getElementById('wallPrice').value = itemData.wall.price;
+    document.getElementById('tileName').value = itemData.tile.name;
+    document.getElementById('tilePrice').value = itemData.tile.price;
+    document.getElementById('paintName').value = itemData.paint.name;
+    document.getElementById('paintPrice').value = itemData.paint.price;
+    document.getElementById('windowName').value = itemData.window.name;
+    document.getElementById('windowPrice').value = itemData.window.price;
+    document.getElementById('islandName').value = itemData.island.name;
+    document.getElementById('islandPrice').value = itemData.island.price;
+    document.getElementById('electricName').value = itemData.electric.name;
+    document.getElementById('electricPrice').value = itemData.electric.price;
+    
+    updateAdminList();
+    document.getElementById('adminSettingsModal').style.display = 'block';
+}
+
+// 관리자 목록 업데이트
+function updateAdminList() {
+    const adminList = document.getElementById('adminList');
+    adminList.innerHTML = '';
+    
+    adminAccounts.forEach((admin, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${admin.id}</span>
+            <button class="delete-admin" onclick="deleteAdmin(${index})">삭제</button>
+        `;
+        adminList.appendChild(li);
+    });
+}
+
+// 관리자 추가
+function addAdmin() {
+    const newId = document.getElementById('newAdminId').value.trim();
+    const newPassword = document.getElementById('newAdminPassword').value.trim();
+    
+    if (!newId || !newPassword) {
+        alert('아이디와 비밀번호를 입력해주세요.');
         return;
     }
-
-    let total = 0;
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
     
-    checkboxes.forEach(checkbox => {
-        const item = checkbox.dataset.item;
-        const category = checkbox.dataset.category;
-        const price = currentPrices[item];
-        
-        if (category === 'lighting') {
-            // 조명은 개당 가격
-            total += price;
-        } else {
-            // 나머지는 평당 가격
-            total += price * area;
-        }
-    });
-
-    totalAmountElement.textContent = total.toLocaleString();
+    if (adminAccounts.find(admin => admin.id === newId)) {
+        alert('이미 존재하는 아이디입니다.');
+        return;
+    }
+    
+    adminAccounts.push({ id: newId, password: newPassword });
+    
+    // 입력 필드 초기화
+    document.getElementById('newAdminId').value = '';
+    document.getElementById('newAdminPassword').value = '';
+    
+    updateAdminList();
+    alert('관리자가 추가되었습니다.');
 }
 
-// 가격 저장
-function savePrices() {
-    const priceInputs = document.querySelectorAll('.price-item input[type="number"]');
+// 관리자 삭제
+function deleteAdmin(index) {
+    if (adminAccounts.length <= 1) {
+        alert('최소 1명의 관리자는 유지되어야 합니다.');
+        return;
+    }
     
-    priceInputs.forEach(input => {
-        const item = input.id.replace('price-', '');
-        const newPrice = parseInt(input.value) || 0;
-        currentPrices[item] = newPrice;
-    });
-    
-    // 로컬 스토리지에 저장
-    localStorage.setItem('interiorPrices', JSON.stringify(currentPrices));
-    
-    // 화면의 가격 라벨 업데이트
-    updatePriceLabels();
-    
-    // 현재 계산 업데이트
-    calculateTotal();
-    
-    showNotification('가격이 성공적으로 저장되었습니다.', 'success');
-}
-
-// 가격 초기화
-function resetPrices() {
-    if (confirm('모든 가격을 기본값으로 재설정하시겠습니까?')) {
-        currentPrices = { ...DEFAULT_PRICES };
-        localStorage.setItem('interiorPrices', JSON.stringify(currentPrices));
-        updatePriceLabels();
-        updateAdminSettings();
-        calculateTotal();
-        showNotification('가격이 기본값으로 재설정되었습니다.', 'success');
+    if (confirm('정말로 이 관리자를 삭제하시겠습니까?')) {
+        adminAccounts.splice(index, 1);
+        updateAdminList();
+        alert('관리자가 삭제되었습니다.');
     }
 }
 
-// 로컬 스토리지에서 가격 불러오기
-function loadPricesFromStorage() {
-    const savedPrices = localStorage.getItem('interiorPrices');
-    if (savedPrices) {
-        try {
-            currentPrices = { ...DEFAULT_PRICES, ...JSON.parse(savedPrices) };
-        } catch (error) {
-            console.error('가격 데이터 로드 실패:', error);
-            currentPrices = { ...DEFAULT_PRICES };
-        }
-    }
+// 설정 저장
+function saveSettings() {
+    // 항목 이름 및 가격 업데이트
+    itemData.floor.name = document.getElementById('floorName').value;
+    itemData.floor.price = parseInt(document.getElementById('floorPrice').value);
+    itemData.wall.name = document.getElementById('wallName').value;
+    itemData.wall.price = parseInt(document.getElementById('wallPrice').value);
+    itemData.tile.name = document.getElementById('tileName').value;
+    itemData.tile.price = parseInt(document.getElementById('tilePrice').value);
+    itemData.paint.name = document.getElementById('paintName').value;
+    itemData.paint.price = parseInt(document.getElementById('paintPrice').value);
+    itemData.window.name = document.getElementById('windowName').value;
+    itemData.window.price = parseInt(document.getElementById('windowPrice').value);
+    itemData.island.name = document.getElementById('islandName').value;
+    itemData.island.price = parseInt(document.getElementById('islandPrice').value);
+    itemData.electric.name = document.getElementById('electricName').value;
+    itemData.electric.price = parseInt(document.getElementById('electricPrice').value);
+    
+    saveData();
+    updatePriceDisplay();
+    alert('설정이 저장되었습니다.');
 }
 
-// 화면의 가격 라벨 업데이트
-function updatePriceLabels() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    
-    checkboxes.forEach(checkbox => {
-        const item = checkbox.dataset.item;
-        const category = checkbox.dataset.category;
-        const price = currentPrices[item];
-        const label = checkbox.parentElement;
-        
-        let unit = '';
-        if (category === 'lighting') {
-            unit = '개당';
-        } else {
-            unit = '평당';
-        }
-        
-        const formattedPrice = price.toLocaleString();
-        label.innerHTML = `<input type="checkbox" data-category="${category}" data-item="${item}" data-price="${price}"> ${item} (${unit} ${formattedPrice}원)`;
-        
-        // 체크박스 상태 유지
-        const newCheckbox = label.querySelector('input[type="checkbox"]');
-        newCheckbox.checked = checkbox.checked;
-        newCheckbox.addEventListener('change', calculateTotal);
-    });
+// 로그아웃
+function logout() {
+    isLoggedIn = false;
+    document.getElementById('adminSettingsModal').style.display = 'none';
+    alert('로그아웃되었습니다.');
 }
 
-// 관리자 설정창 업데이트
-function updateAdminSettings() {
-    Object.keys(currentPrices).forEach(item => {
-        const input = document.getElementById(`price-${item}`);
-        if (input) {
-            input.value = currentPrices[item];
-        }
-    });
-}
-
-// 알림 표시
-function showNotification(message, type = 'info') {
-    // 기존 알림 제거
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
-    }
-    
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    
-    // 알림 스타일
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        border-radius: 8px;
-        color: white;
-        font-weight: 600;
-        z-index: 10000;
-        max-width: 400px;
-        animation: slideInRight 0.3s ease;
-    `;
-    
-    // 타입별 색상
-    switch (type) {
-        case 'success':
-            notification.style.background = '#28a745';
-            break;
-        case 'error':
-            notification.style.background = '#dc3545';
-            break;
-        default:
-            notification.style.background = '#667eea';
-    }
-    
-    document.body.appendChild(notification);
-    
-    // 3초 후 자동 제거
-    setTimeout(() => {
-        if (notification.parentElement) {
-            notification.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }
-    }, 3000);
-}
-
-// CSS 애니메이션 추가
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slideOutRight {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// 숫자 입력 검증
-function validateNumberInput(input) {
-    const value = parseInt(input.value);
-    if (isNaN(value) || value < 0) {
-        input.value = 0;
-    }
-}
-
-// 모든 숫자 입력 필드에 검증 이벤트 추가
+// 이벤트 리스너 설정
 document.addEventListener('DOMContentLoaded', function() {
-    const numberInputs = document.querySelectorAll('input[type="number"]');
-    numberInputs.forEach(input => {
-        input.addEventListener('blur', () => validateNumberInput(input));
+    loadData();
+    
+    // 관리자 모드 버튼
+    document.getElementById('adminBtn').addEventListener('click', function() {
+        document.getElementById('adminModal').style.display = 'block';
+    });
+    
+    // 견적 계산 버튼
+    document.getElementById('calculateBtn').addEventListener('click', calculateTotal);
+    
+    // 실시간 계산 (입력값 변경시)
+    const inputs = ['floorArea', 'wallArea', 'tileArea', 'paintArea', 'windowCount', 'islandDays', 'electricArea'];
+    inputs.forEach(id => {
+        document.getElementById(id).addEventListener('input', calculateTotal);
+    });
+    
+    // 로그인 버튼
+    document.getElementById('loginBtn').addEventListener('click', adminLogin);
+    
+    // 관리자 추가 버튼
+    document.getElementById('addAdminBtn').addEventListener('click', addAdmin);
+    
+    // 설정 저장 버튼
+    document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+    
+    // 로그아웃 버튼
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    
+    // 모달 닫기 버튼들
+    document.querySelectorAll('.close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+            this.closest('.modal').style.display = 'none';
+        });
+    });
+    
+    // 모달 외부 클릭시 닫기
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+    
+    // Enter 키로 로그인
+    document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            adminLogin();
+        }
+    });
+    
+    // Enter 키로 관리자 추가
+    document.getElementById('newAdminPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            addAdmin();
+        }
     });
 });
