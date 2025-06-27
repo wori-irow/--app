@@ -1,169 +1,88 @@
+// 견적 리스트 저장용
+const estimates = [];
 
-// 공간별 기본 단가 (평당 만원)
-const basePrices = {
-    living: 80,    // 거실
-    bedroom: 70,   // 침실
-    kitchen: 120,  // 주방
-    bathroom: 150, // 욕실
-    office: 90     // 사무실
+const categoryMap = {
+  wallpaper: "도배",
+  flooring: "바닥재",
+  ceiling: "천장",
+  molding: "몰딩",
+  lighting: "조명",
+  electric: "전기",
+  woodwork: "목공",
+  door: "문 교체",
+  bathroom: "욕실 리모델링",
+  sash: "샷시"
 };
 
-// 작업 종류별 배수
-const workTypeMultipliers = {
-    basic: 1.0,     // 기본 도배/장판
-    premium: 1.8,   // 프리미엄 마감재
-    luxury: 2.5,    // 럭셔리 인테리어
-    full: 3.5       // 풀 리모델링
-};
-
-// 추가 옵션 비용
-const additionalOptions = {
-    lighting: 50,    // 조명 공사 (만원)
-    electrical: 100, // 전기 공사 (만원)
-    plumbing: 150,   // 배관 공사 (만원)
-    flooring: 20     // 바닥재 교체 (평당 만원)
-};
-
-// DOM 요소 선택
-const roomTypeSelect = document.getElementById('roomType');
-const areaInput = document.getElementById('area');
-const workTypeSelect = document.getElementById('workType');
-const calculateBtn = document.getElementById('calculateBtn');
-const resultSection = document.getElementById('resultSection');
-const basicCostSpan = document.getElementById('basicCost');
-const optionCostSpan = document.getElementById('optionCost');
-const totalCostSpan = document.getElementById('totalCost');
-
-// 체크박스 요소들
-const checkboxes = {
-    lighting: document.getElementById('lighting'),
-    electrical: document.getElementById('electrical'),
-    plumbing: document.getElementById('plumbing'),
-    flooring: document.getElementById('flooring')
-};
-
-// 숫자를 원화 형식으로 포맷팅
-function formatCurrency(amount) {
-    return new Intl.NumberFormat('ko-KR').format(amount) + '원';
+function formatPrice(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-// 기본 공사비 계산
-function calculateBasicCost() {
-    const roomType = roomTypeSelect.value;
-    const area = parseFloat(areaInput.value) || 0;
-    const workType = workTypeSelect.value;
-    
-    const basePrice = basePrices[roomType];
-    const multiplier = workTypeMultipliers[workType];
-    
-    return Math.round(basePrice * area * multiplier * 10000); // 만원을 원으로 변환
+function updateEstimateList() {
+  const ul = document.getElementById("estimateItems");
+  ul.innerHTML = "";
+
+  let total = 0;
+  estimates.forEach((item, idx) => {
+    const li = document.createElement("li");
+    li.textContent = `${categoryMap[item.category]} - 면적: ${item.area}㎡, 단가: ${formatPrice(item.price)}원, 합계: ${formatPrice(item.area * item.price)}원`;
+
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "삭제";
+    delBtn.style.marginLeft = "10px";
+    delBtn.onclick = () => {
+      estimates.splice(idx, 1);
+      updateEstimateList();
+    };
+    li.appendChild(delBtn);
+
+    ul.appendChild(li);
+
+    total += item.area * item.price;
+  });
+
+  document.getElementById("totalPrice").textContent = formatPrice(total);
 }
 
-// 추가 옵션 비용 계산
-function calculateOptionCost() {
-    const area = parseFloat(areaInput.value) || 0;
-    let totalOptionCost = 0;
-    
-    // 각 체크박스 확인
-    for (const [optionName, checkbox] of Object.entries(checkboxes)) {
-        if (checkbox.checked) {
-            if (optionName === 'flooring') {
-                // 바닥재는 평당 계산
-                totalOptionCost += additionalOptions[optionName] * area * 10000;
-            } else {
-                // 나머지는 고정 비용
-                totalOptionCost += additionalOptions[optionName] * 10000;
-            }
-        }
-    }
-    
-    return Math.round(totalOptionCost);
-}
+document.getElementById("addEstimate").addEventListener("click", () => {
+  const buildingType = document.getElementById("buildingType").value;
+  const workType = document.getElementById("workType").value;
+  const category = document.getElementById("category").value;
+  const area = parseFloat(document.getElementById("area").value);
+  const price = parseInt(document.getElementById("materialPrice").value, 10);
 
-// 견적 계산 및 표시
-function calculateEstimate() {
-    const area = parseFloat(areaInput.value);
-    
-    // 입력 값 검증
-    if (!area || area <= 0) {
-        alert('올바른 면적을 입력해주세요.');
-        areaInput.focus();
-        return;
-    }
-    
-    if (area > 100) {
-        alert('100평 이하의 면적을 입력해주세요.');
-        areaInput.focus();
-        return;
-    }
-    
-    // 비용 계산
-    const basicCost = calculateBasicCost();
-    const optionCost = calculateOptionCost();
-    const totalCost = basicCost + optionCost;
-    
-    // 결과 표시
-    basicCostSpan.textContent = formatCurrency(basicCost);
-    optionCostSpan.textContent = formatCurrency(optionCost);
-    totalCostSpan.textContent = formatCurrency(totalCost);
-    
-    // 결과 섹션 표시
-    resultSection.classList.add('show');
-    
-    // 결과 섹션으로 스크롤
-    resultSection.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-    });
-}
+  if (!buildingType || !workType) {
+    alert("건물 유형과 공사 유형을 선택하세요.");
+    return;
+  }
+  if (!category) {
+    alert("항목을 선택하세요.");
+    return;
+  }
+  if (isNaN(area) || area <= 0) {
+    alert("유효한 면적을 입력하세요.");
+    return;
+  }
+  if (isNaN(price) || price <= 0) {
+    alert("유효한 단가를 입력하세요.");
+    return;
+  }
 
-// 실시간 계산 (입력값이 변경될 때마다)
-function handleInputChange() {
-    const area = parseFloat(areaInput.value);
-    
-    if (area && area > 0 && area <= 100) {
-        calculateEstimate();
-    }
-}
+  // 항목 추가
+  estimates.push({ buildingType, workType, category, area, price });
+  updateEstimateList();
 
-// 이벤트 리스너 등록
-calculateBtn.addEventListener('click', calculateEstimate);
-
-// 입력값 변경 시 실시간 계산
-areaInput.addEventListener('input', handleInputChange);
-roomTypeSelect.addEventListener('change', handleInputChange);
-workTypeSelect.addEventListener('change', handleInputChange);
-
-// 체크박스 변경 시 실시간 계산
-Object.values(checkboxes).forEach(checkbox => {
-    checkbox.addEventListener('change', handleInputChange);
+  // 입력값 초기화 (면적, 단가만)
+  document.getElementById("area").value = "";
+  document.getElementById("materialPrice").value = "";
+});
+  
+document.getElementById("clearAll").addEventListener("click", () => {
+  if (confirm("모든 견적 항목을 삭제하시겠습니까?")) {
+    estimates.length = 0;
+    updateEstimateList();
+  }
 });
 
-// 엔터 키로 계산
-areaInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        calculateEstimate();
-    }
-});
-
-// 페이지 로드 시 초기 설정
-document.addEventListener('DOMContentLoaded', function() {
-    // 기본값 설정
-    areaInput.value = '';
-    roomTypeSelect.value = 'living';
-    workTypeSelect.value = 'basic';
-    
-    // 모든 체크박스 해제
-    Object.values(checkboxes).forEach(checkbox => {
-        checkbox.checked = false;
-    });
-    
-    // 결과 섹션 숨김
-    resultSection.classList.remove('show');
-    
-    // 면적 입력 필드에 포커스
-    areaInput.focus();
-});
-
-// 모바일에서 숫자 키패드 표시
-areaInput.setAttribute('inputmode', 'decimal');
+// 초기 렌더링
+updateEstimateList();
