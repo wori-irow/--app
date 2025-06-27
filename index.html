@@ -9,218 +9,201 @@
 </head>
 <body>
     <div class="container">
-        <!-- 헤더 -->
-        <header class="header">
+        <header>
             <h1>🏠 인테리어 견적 계산기</h1>
             <button id="adminModeBtn" class="admin-btn">관리자 모드</button>
         </header>
 
-        <!-- 관리자 패널 (초기에는 숨겨짐) -->
+        <!-- 관리자 패널 (초기에는 숨김) -->
         <div id="adminPanel" class="admin-panel hidden">
-            <h2>관리자 패널</h2>
-            <button id="changePasswordBtn" class="admin-action-btn">비밀번호 변경</button>
-            <div class="admin-controls">
+            <div class="admin-header">
+                <h2>🔧 관리자 모드</h2>
+                <div class="admin-controls">
+                    <button id="changePasswordBtn" class="btn-secondary">비밀번호 변경</button>
+                    <button id="exitAdminBtn" class="btn-secondary">관리자 모드 종료</button>
+                </div>
+            </div>
+            <div class="admin-content">
                 <h3>단가 설정</h3>
-                <!-- 단가 설정 UI는 JavaScript로 동적 생성 -->
+                <div id="priceSettings" class="price-settings"></div>
             </div>
         </div>
 
-        <!-- 견적 입력 폼 -->
-        <div class="calculator-section">
-            <h2>견적 항목 입력</h2>
-            
-            <!-- 1. 도배 -->
-            <div class="item-group">
-                <h3>1. 도배</h3>
-                <div class="input-row">
-                    <select id="wallpaper-type">
-                        <option value="">선택하세요</option>
-                        <option value="silk">실크</option>
-                        <option value="composite">합지</option>
-                    </select>
-                    <input type="number" id="wallpaper-area" placeholder="평수 입력" min="0" step="0.1">
-                    <span>평</span>
+        <main>
+            <div class="input-section">
+                <!-- 도배 -->
+                <div class="item-group">
+                    <h3>🎨 도배</h3>
+                    <div class="input-row">
+                        <select id="wallpaperType">
+                            <option value="">선택하세요</option>
+                            <option value="silk">실크</option>
+                            <option value="synthetic">합지</option>
+                        </select>
+                        <input type="number" id="wallpaperArea" placeholder="평수" min="0" step="0.1">
+                        <span>평</span>
+                    </div>
+                </div>
+
+                <!-- 바닥재 -->
+                <div class="item-group">
+                    <h3>🔲 바닥재</h3>
+                    <div class="input-row">
+                        <select id="flooringType">
+                            <option value="">선택하세요</option>
+                            <option value="hardwood">강마루</option>
+                            <option value="vinyl">장판</option>
+                        </select>
+                        <input type="number" id="flooringArea" placeholder="평수" min="0" step="0.1">
+                        <span>평</span>
+                    </div>
+                </div>
+
+                <!-- 천장 -->
+                <div class="item-group">
+                    <h3>🏠 천장</h3>
+                    <div class="input-row">
+                        <select id="ceilingType">
+                            <option value="">선택하세요</option>
+                            <option value="normal">일반</option>
+                            <option value="fireproof">방염</option>
+                        </select>
+                        <input type="number" id="ceilingArea" placeholder="평수" min="0" step="0.1">
+                        <span>평</span>
+                    </div>
+                </div>
+
+                <!-- 몰딩 -->
+                <div class="item-group">
+                    <h3>📐 몰딩</h3>
+                    <div class="input-row">
+                        <select id="moldingType">
+                            <option value="">선택하세요</option>
+                            <option value="normal">일반</option>
+                            <option value="premium">고급</option>
+                        </select>
+                        <input type="number" id="moldingLength" placeholder="미터" min="0" step="0.1">
+                        <span>m</span>
+                    </div>
+                </div>
+
+                <!-- 조명 -->
+                <div class="item-group">
+                    <h3>💡 조명</h3>
+                    <div class="input-row">
+                        <input type="number" id="lightingCount" placeholder="개수" min="0">
+                        <span>개</span>
+                    </div>
+                </div>
+
+                <!-- 전기공사 -->
+                <div class="item-group">
+                    <h3>⚡ 전기공사</h3>
+                    <div class="input-row">
+                        <input type="number" id="outletCount" placeholder="콘센트 수" min="0">
+                        <span>개</span>
+                    </div>
+                    <div class="input-row">
+                        <input type="number" id="switchCount" placeholder="스위치 수" min="0">
+                        <span>개</span>
+                    </div>
+                    <div class="input-row">
+                        <input type="number" id="electricalArea" placeholder="평수" min="0" step="0.1">
+                        <span>평</span>
+                    </div>
+                </div>
+
+                <!-- 목공 -->
+                <div class="item-group">
+                    <h3>🔨 목공</h3>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="partitionWall"> 가벽 시공</label>
+                        <label><input type="checkbox" id="doorFrameRepair"> 문틀 보수</label>
+                    </div>
+                </div>
+
+                <!-- 문 교체 -->
+                <div class="item-group">
+                    <h3>🚪 문 교체</h3>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="roomDoor"> 방문</label>
+                        <label><input type="checkbox" id="entranceDoor"> 현관문</label>
+                    </div>
+                </div>
+
+                <!-- 욕실 리모델링 -->
+                <div class="item-group">
+                    <h3>🚿 욕실 리모델링</h3>
+                    <div class="input-row">
+                        <select id="bathroomType">
+                            <option value="">선택하세요</option>
+                            <option value="full">전체</option>
+                            <option value="partial">부분</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 샷시 -->
+                <div class="item-group">
+                    <h3>🪟 샷시</h3>
+                    <div class="input-row">
+                        <select id="windowType">
+                            <option value="">선택하세요</option>
+                            <option value="room">방샷시</option>
+                            <option value="living">거실샷시</option>
+                        </select>
+                        <input type="number" id="windowCount" placeholder="창문 개수" min="0">
+                        <span>개</span>
+                    </div>
+                </div>
+
+                <!-- 섬 지역 시공 -->
+                <div class="item-group">
+                    <h3>🏝️ 섬 지역 시공</h3>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="islandWork"> 섬 지역 시공</label>
+                    </div>
+                    <div class="input-row hidden" id="stayDaysRow">
+                        <input type="number" id="stayDays" placeholder="체류 일수" min="1">
+                        <span>일</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- 2. 바닥재 -->
-            <div class="item-group">
-                <h3>2. 바닥재</h3>
-                <div class="input-row">
-                    <select id="flooring-type">
-                        <option value="">선택하세요</option>
-                        <option value="laminate">강마루</option>
-                        <option value="vinyl">장판</option>
-                    </select>
-                    <input type="number" id="flooring-area" placeholder="평수 입력" min="0" step="0.1">
-                    <span>평</span>
+            <!-- 견적 결과 -->
+            <div class="result-section">
+                <h2>📋 견적 결과</h2>
+                <div class="table-container">
+                    <table id="estimateTable">
+                        <thead>
+                            <tr>
+                                <th>항목</th>
+                                <th>세부사항</th>
+                                <th>단가</th>
+                                <th>수량</th>
+                                <th>합계</th>
+                            </tr>
+                        </thead>
+                        <tbody id="estimateBody">
+                            <!-- 계산 결과가 여기에 동적으로 추가됩니다 -->
+                        </tbody>
+                        <tfoot>
+                            <tr class="total-row">
+                                <td colspan="4"><strong>총 견적 금액</strong></td>
+                                <td><strong id="totalAmount">0원</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
-            </div>
 
-            <!-- 3. 천장 -->
-            <div class="item-group">
-                <h3>3. 천장</h3>
-                <div class="input-row">
-                    <select id="ceiling-type">
-                        <option value="">선택하세요</option>
-                        <option value="standard">일반</option>
-                        <option value="fireproof">방염</option>
-                    </select>
-                    <input type="number" id="ceiling-area" placeholder="평수 입력" min="0" step="0.1">
-                    <span>평</span>
+                <div class="action-buttons">
+                    <button id="copyEstimateBtn" class="btn-primary">📋 견적서 복사</button>
+                    <button id="saveAsPdfBtn" class="btn-primary">📄 PDF 저장</button>
                 </div>
             </div>
-
-            <!-- 4. 몰딩 -->
-            <div class="item-group">
-                <h3>4. 몰딩</h3>
-                <div class="input-row">
-                    <select id="molding-type">
-                        <option value="">선택하세요</option>
-                        <option value="standard">일반</option>
-                        <option value="premium">고급</option>
-                    </select>
-                    <input type="number" id="molding-length" placeholder="미터 입력" min="0" step="0.1">
-                    <span>m</span>
-                </div>
-            </div>
-
-            <!-- 5. 조명 -->
-            <div class="item-group">
-                <h3>5. 조명</h3>
-                <div class="input-row">
-                    <input type="number" id="lighting-count" placeholder="개수 입력" min="0">
-                    <span>개</span>
-                </div>
-            </div>
-
-            <!-- 6. 전기공사 -->
-            <div class="item-group">
-                <h3>6. 전기공사</h3>
-                <div class="input-row">
-                    <input type="number" id="outlet-count" placeholder="콘센트 수" min="0">
-                    <span>개</span>
-                </div>
-                <div class="input-row">
-                    <input type="number" id="switch-count" placeholder="스위치 수" min="0">
-                    <span>개</span>
-                </div>
-                <div class="input-row">
-                    <input type="number" id="electrical-area" placeholder="평수 입력" min="0" step="0.1">
-                    <span>평</span>
-                </div>
-            </div>
-
-            <!-- 7. 목공 -->
-            <div class="item-group">
-                <h3>7. 목공</h3>
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="partition-work" value="partition">
-                        가벽 시공
-                    </label>
-                    <label>
-                        <input type="checkbox" id="door-frame-work" value="doorframe">
-                        문틀 보수
-                    </label>
-                </div>
-            </div>
-
-            <!-- 8. 문 교체 -->
-            <div class="item-group">
-                <h3>8. 문 교체</h3>
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="room-door" value="roomdoor">
-                        방문
-                    </label>
-                    <label>
-                        <input type="checkbox" id="entrance-door" value="entrancedoor">
-                        현관문
-                    </label>
-                </div>
-            </div>
-
-            <!-- 9. 욕실 리모델링 -->
-            <div class="item-group">
-                <h3>9. 욕실 리모델링</h3>
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="bathroom-full" value="bathroomfull">
-                        전체
-                    </label>
-                    <label>
-                        <input type="checkbox" id="bathroom-partial" value="bathroompartial">
-                        부분
-                    </label>
-                </div>
-            </div>
-
-            <!-- 10. 샷시 -->
-            <div class="item-group">
-                <h3>10. 샷시</h3>
-                <div class="input-row">
-                    <select id="window-type">
-                        <option value="">선택하세요</option>
-                        <option value="room">방샷시</option>
-                        <option value="living">거실샷시</option>
-                    </select>
-                    <input type="number" id="window-count" placeholder="창문 개수" min="0">
-                    <span>개</span>
-                </div>
-            </div>
-
-            <!-- 11. 섬 지역 시공 -->
-            <div class="item-group">
-                <h3>11. 섬 지역 시공</h3>
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="island-work">
-                        섬 지역 시공
-                    </label>
-                </div>
-                <div id="island-days-input" class="input-row hidden">
-                    <input type="number" id="island-days" placeholder="체류 일수" min="0">
-                    <span>일</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 견적 결과 -->
-        <div class="result-section">
-            <h2>견적 결과</h2>
-            <div class="table-container">
-                <table id="estimateTable">
-                    <thead>
-                        <tr>
-                            <th>항목</th>
-                            <th>세부사항</th>
-                            <th>단가</th>
-                            <th>수량</th>
-                            <th>금액</th>
-                        </tr>
-                    </thead>
-                    <tbody id="estimateTableBody">
-                        <!-- 동적으로 생성 -->
-                    </tbody>
-                    <tfoot>
-                        <tr class="total-row">
-                            <td colspan="4"><strong>총 견적 금액</strong></td>
-                            <td id="totalAmount"><strong>0원</strong></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-            
-            <!-- 액션 버튼들 -->
-            <div class="action-buttons">
-                <button id="copyEstimateBtn" class="action-btn">견적서 복사</button>
-                <button id="printEstimateBtn" class="action-btn">PDF 저장/인쇄</button>
-            </div>
-        </div>
+        </main>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
-
