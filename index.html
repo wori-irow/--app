@@ -4,227 +4,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>인테리어 견적 계산기</title>
+    <title>인테리어 예상 견적 계산기</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- 헤더 -->
         <header class="header">
-            <h1>🏠 인테리어 견적 계산기</h1>
-            <button id="adminBtn" class="admin-btn">관리자 모드</button>
+            <div class="header-content">
+                <h1><i class="fas fa-home"></i> 인테리어 견적 계산기</h1>
+                <button id="adminBtn" class="admin-btn">
+                    <i class="fas fa-cog"></i> 관리자 모드
+                </button>
+            </div>
         </header>
 
-        <!-- 메인 컨텐츠 -->
-        <div class="main-content">
-            <!-- 입력 폼 -->
-            <div class="form-section">
-                <h2>견적 정보 입력</h2>
-                
-                <!-- 기본 정보 -->
-                <div class="form-group">
-                    <label for="workDays">공사기간 (일):</label>
-                    <input type="number" id="workDays" min="1" value="1" class="form-input">
+        <main class="main-content">
+            <!-- 기본 정보 입력 -->
+            <section class="card">
+                <h2><i class="fas fa-info-circle"></i> 기본 정보</h2>
+                <div class="input-group">
+                    <label for="area">공사 면적 (평)</label>
+                    <input type="number" id="area" placeholder="예: 30" min="1">
+                </div>
+                <div class="input-group">
+                    <label for="duration">공사 기간 (일)</label>
+                    <input type="number" id="duration" placeholder="예: 30" min="1">
+                </div>
+            </section>
+
+            <!-- 공사 항목 선택 -->
+            <section class="card">
+                <h2><i class="fas fa-tasks"></i> 공사 항목</h2>
+                <div class="items-grid">
+                    <!-- 평당 계산 항목들 -->
+                    <div class="item-card per-area">
+                        <div class="item-header">
+                            <input type="checkbox" id="demolition" class="item-checkbox">
+                            <label for="demolition">철거공사</label>
+                            <span class="unit-price" data-price="50000">50,000원/평</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card per-area">
+                        <div class="item-header">
+                            <input type="checkbox" id="carpentry" class="item-checkbox">
+                            <label for="carpentry">목공사</label>
+                            <span class="unit-price" data-price="200000">200,000원/평</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card per-area">
+                        <div class="item-header">
+                            <input type="checkbox" id="electrical" class="item-checkbox">
+                            <label for="electrical">전기공사</label>
+                            <span class="unit-price" data-price="150000">150,000원/평</span>
+                        </div>
+                    </div>
+
+                    <!-- 일반 항목들 -->
+                    <div class="item-card">
+                        <div class="item-header">
+                            <input type="checkbox" id="wallpaper" class="item-checkbox">
+                            <label for="wallpaper">도배</label>
+                            <span class="unit-price" data-price="500000">500,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-header">
+                            <input type="checkbox" id="window" class="item-checkbox">
+                            <label for="window">샷시</label>
+                            <span class="unit-price" data-price="800000">800,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-header">
+                            <input type="checkbox" id="lighting" class="item-checkbox">
+                            <label for="lighting">조명</label>
+                            <span class="unit-price" data-price="300000">300,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-header">
+                            <input type="checkbox" id="molding" class="item-checkbox">
+                            <label for="molding">몰딩</label>
+                            <span class="unit-price" data-price="400000">400,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-header">
+                            <input type="checkbox" id="flooring" class="item-checkbox">
+                            <label for="flooring">바닥재</label>
+                            <span class="unit-price" data-price="600000">600,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-header">
+                            <input type="checkbox" id="door" class="item-checkbox">
+                            <label for="door">문교체</label>
+                            <span class="unit-price" data-price="350000">350,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-header">
+                            <input type="checkbox" id="bathroom" class="item-checkbox">
+                            <label for="bathroom">욕실</label>
+                            <span class="unit-price" data-price="1200000">1,200,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-header">
+                            <input type="checkbox" id="aircon" class="item-checkbox">
+                            <label for="aircon">에어컨</label>
+                            <span class="unit-price" data-price="900000">900,000원</span>
+                        </div>
+                    </div>
+
+                    <div class="item-card">
+                        <div class="item-header">
+                            <input type="checkbox" id="plumbing" class="item-checkbox">
+                            <label for="plumbing">설비</label>
+                            <span class="unit-price" data-price="700000">700,000원</span>
+                        </div>
+                    </div>
+
+                    <!-- 일당 계산 항목 -->
+                    <div class="item-card per-day">
+                        <div class="item-header">
+                            <input type="checkbox" id="island" class="item-checkbox">
+                            <label for="island">섬공사</label>
+                            <span class="unit-price" data-price="200000">200,000원/일</span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- 평당 계산 항목들 -->
-                <div class="category-group">
-                    <h3>평당 계산 항목</h3>
-                    
-                    <div class="form-group">
-                        <label for="demolition">철거 (평):</label>
-                        <input type="number" id="demolition" min="0" step="0.1" value="0" class="form-input">
+                <!-- 기본 인건비 -->
+                <div class="labor-cost">
+                    <div class="labor-header">
+                        <h3><i class="fas fa-users"></i> 기본 인건비</h3>
+                        <span class="labor-price" data-price="150000">150,000원/일</span>
                     </div>
-
-                    <div class="form-group">
-                        <label for="carpentry">목공 (평):</label>
-                        <input type="number" id="carpentry" min="0" step="0.1" value="0" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="electrical">전기공사 (평):</label>
-                        <input type="number" id="electrical" min="0" step="0.1" value="0" class="form-input">
-                    </div>
+                    <p class="labor-description">공사기간 동안 자동으로 계산됩니다</p>
                 </div>
-
-                <!-- 개별 계산 항목들 -->
-                <div class="category-group">
-                    <h3>개별 계산 항목</h3>
-                    
-                    <div class="form-group">
-                        <label for="wallpaper">도배 (개수):</label>
-                        <input type="number" id="wallpaper" min="0" value="0" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="window">샷시 (개수):</label>
-                        <input type="number" id="window" min="0" value="0" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="lighting">조명 (개수):</label>
-                        <input type="number" id="lighting" min="0" value="0" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="molding">몰딩 (미터):</label>
-                        <input type="number" id="molding" min="0" step="0.1" value="0" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="flooring">바닥재 (평):</label>
-                        <input type="number" id="flooring" min="0" step="0.1" value="0" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="door">문교체 (개수):</label>
-                        <input type="number" id="door" min="0" value="0" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="bathroom">욕실 (개수):</label>
-                        <input type="number" id="bathroom" min="0" value="0" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="aircon">에어컨 (개수):</label>
-                        <input type="number" id="aircon" min="0" value="0" class="form-input">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="facility">설비 (개수):</label>
-                        <input type="number" id="facility" min="0" value="0" class="form-input">
-                    </div>
-                </div>
-
-                <!-- 특수 항목들 -->
-                <div class="category-group">
-                    <h3>특수 항목</h3>
-                    
-                    <div class="form-group">
-                        <label for="islandWork">
-                            <input type="checkbox" id="islandWork"> 섬 공사
-                        </label>
-                        <input type="number" id="islandDays" min="0" value="0" placeholder="일수" class="form-input" disabled>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="includeLaborCost">
-                            <input type="checkbox" id="includeLaborCost" checked> 기본 인건비 포함
-                        </label>
-                    </div>
-                </div>
-            </div>
+            </section>
 
             <!-- 견적 결과 -->
-            <div class="result-section">
-                <h2>견적 결과</h2>
-                <div class="estimate-table">
-                    <table id="estimateTable">
-                        <thead>
-                            <tr>
-                                <th>항목</th>
-                                <th>단가</th>
-                                <th>수량</th>
-                                <th>금액</th>
-                            </tr>
-                        </thead>
-                        <tbody id="estimateTableBody">
-                        </tbody>
-                        <tfoot>
-                            <tr class="total-row">
-                                <td colspan="3"><strong>총 합계</strong></td>
-                                <td id="totalAmount"><strong>0원</strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+            <section class="card estimate-result">
+                <h2><i class="fas fa-calculator"></i> 견적 결과</h2>
+                <div class="estimate-breakdown">
+                    <div class="breakdown-item">
+                        <span>공사 항목 합계</span>
+                        <span id="itemsTotal">0원</span>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>기본 인건비</span>
+                        <span id="laborTotal">0원</span>
+                    </div>
+                    <div class="breakdown-item total">
+                        <span>총 예상 견적</span>
+                        <span id="grandTotal">0원</span>
+                    </div>
                 </div>
+            </section>
+        </main>
+    </div>
 
-                <div class="action-buttons">
-                    <button id="copyBtn" class="action-btn">견적서 복사</button>
-                    <button id="printBtn" class="action-btn">인쇄</button>
+    <!-- 관리자 모드 모달 -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-lock"></i> 관리자 인증</h3>
+                <button class="close-btn" onclick="closeAdminModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label for="adminPassword">비밀번호</label>
+                    <input type="password" id="adminPassword" placeholder="비밀번호를 입력하세요">
                 </div>
+                <button onclick="verifyAdmin()" class="btn-primary">확인</button>
             </div>
         </div>
+    </div>
 
-        <!-- 관리자 패널 -->
-        <div id="adminPanel" class="admin-panel" style="display: none;">
-            <div class="admin-content">
-                <h2>관리자 모드 - 단가 설정</h2>
-                <div class="admin-form">
-                    <div class="admin-group">
-                        <h3>평당 계산 항목</h3>
-                        <div class="admin-item">
-                            <label>철거 (평당):</label>
-                            <input type="number" id="admin-demolition" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>목공 (평당):</label>
-                            <input type="number" id="admin-carpentry" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>전기공사 (평당):</label>
-                            <input type="number" id="admin-electrical" class="admin-input">
-                        </div>
-                    </div>
-
-                    <div class="admin-group">
-                        <h3>개별 계산 항목</h3>
-                        <div class="admin-item">
-                            <label>도배 (개당):</label>
-                            <input type="number" id="admin-wallpaper" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>샷시 (개당):</label>
-                            <input type="number" id="admin-window" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>조명 (개당):</label>
-                            <input type="number" id="admin-lighting" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>몰딩 (미터당):</label>
-                            <input type="number" id="admin-molding" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>바닥재 (평당):</label>
-                            <input type="number" id="admin-flooring" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>문교체 (개당):</label>
-                            <input type="number" id="admin-door" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>욕실 (개당):</label>
-                            <input type="number" id="admin-bathroom" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>에어컨 (개당):</label>
-                            <input type="number" id="admin-aircon" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>설비 (개당):</label>
-                            <input type="number" id="admin-facility" class="admin-input">
-                        </div>
-                    </div>
-
-                    <div class="admin-group">
-                        <h3>특수 항목</h3>
-                        <div class="admin-item">
-                            <label>섬 공사 (일당):</label>
-                            <input type="number" id="admin-island" class="admin-input">
-                        </div>
-                        <div class="admin-item">
-                            <label>기본 인건비 (일당):</label>
-                            <input type="number" id="admin-labor" class="admin-input">
-                        </div>
-                    </div>
+    <!-- 관리자 설정 모달 -->
+    <div id="adminSettingsModal" class="modal">
+        <div class="modal-content admin-settings">
+            <div class="modal-header">
+                <h3><i class="fas fa-cog"></i> 단가 관리</h3>
+                <button class="close-btn" onclick="closeAdminSettings()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="admin-items">
+                    <!-- 관리자 설정 항목들이 동적으로 생성됩니다 -->
                 </div>
-
-                <div class="admin-buttons">
-                    <button id="saveBtn" class="save-btn">저장</button>
-                    <button id="changePasswordBtn" class="change-password-btn">비밀번호 변경</button>
-                    <button id="closeAdminBtn" class="close-btn">닫기</button>
+                <div class="modal-footer">
+                    <button onclick="saveAdminSettings()" class="btn-primary">저장</button>
+                    <button onclick="closeAdminSettings()" class="btn-secondary">취소</button>
                 </div>
             </div>
         </div>
