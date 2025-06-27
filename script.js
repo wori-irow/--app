@@ -1,538 +1,281 @@
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+// 기본 데이터 구조
+let itemData = {
+    floor: { name: '바닥재', price: 50000, unit: '평' },
+    wall: { name: '벽지', price: 30000, unit: '평' },
+    tile: { name: '타일', price: 80000, unit: '평' },
+    paint: { name: '도배', price: 25000, unit: '평' },
+    window: { name: '샷시', price: 150000, unit: '개' },
+    island: { name: '섬 공사', price: 300000, unit: '일' },
+    electric: { name: '전기 공사', price: 120000, unit: '평' }
+};
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    color: #333;
-}
+let adminAccounts = [
+    { id: 'suwon1234', password: '1234' }
+];
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
+let isLoggedIn = false;
 
-header {
-    text-align: center;
-    margin-bottom: 40px;
-    position: relative;
-}
-
-h1 {
-    color: white;
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.admin-btn {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background: rgba(255,255,255,0.2);
-    color: white;
-    border: 2px solid rgba(255,255,255,0.3);
-    padding: 8px 16px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-}
-
-.admin-btn:hover {
-    background: rgba(255,255,255,0.3);
-    border-color: rgba(255,255,255,0.5);
-    transform: translateY(-2px);
-}
-
-.calculator-section {
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    backdrop-filter: blur(10px);
-}
-
-.item-group {
-    margin-bottom: 30px;
-    padding: 25px;
-    background: linear-gradient(145deg, #f8f9fa, #e9ecef);
-    border-radius: 15px;
-    border-left: 5px solid #667eea;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.item-group:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.item-group h3 {
-    color: #667eea;
-    font-size: 1.3rem;
-    margin-bottom: 15px;
-    font-weight: 600;
-}
-
-.input-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.input-group label {
-    font-weight: 500;
-    color: #495057;
-    min-width: 60px;
-}
-
-.input-group input {
-    flex: 1;
-    min-width: 120px;
-    padding: 12px 15px;
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.unit {
-    font-weight: 500;
-    color: #6c757d;
-    min-width: 30px;
-}
-
-.price-per-unit {
-    color: #28a745;
-    font-weight: 600;
-    font-size: 0.9rem;
-    background: rgba(40, 167, 69, 0.1);
-    padding: 5px 10px;
-    border-radius: 15px;
-}
-
-.total-section {
-    text-align: center;
-    margin-top: 40px;
-    padding: 30px;
-    background: linear-gradient(145deg, #667eea, #764ba2);
-    border-radius: 20px;
-    color: white;
-}
-
-.total-section h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-#totalPrice {
-    color: #ffd700;
-    font-weight: 700;
-}
-
-.calculate-btn {
-    background: linear-gradient(145deg, #28a745, #20c997);
-    color: white;
-    border: none;
-    padding: 15px 40px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-}
-
-.calculate-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
-    background: linear-gradient(145deg, #20c997, #28a745);
-}
-
-/* 모달 스타일 */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    backdrop-filter: blur(5px);
-}
-
-.modal-content {
-    background-color: white;
-    margin: 5% auto;
-    padding: 0;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    animation: modalSlideIn 0.3s ease;
-}
-
-.modal-content.admin-settings {
-    max-width: 800px;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-@keyframes modalSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.modal-header {
-    background: linear-gradient(145deg, #667eea, #764ba2);
-    color: white;
-    padding: 20px;
-    border-radius: 20px 20px 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.modal-header h2 {
-    margin: 0;
-    font-size: 1.5rem;
-}
-
-.close {
-    color: white;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.close:hover {
-    color: #ffd700;
-}
-
-.modal-body {
-    padding: 30px;
-}
-
-.login-form .input-group {
-    margin-bottom: 20px;
-    display: block;
-}
-
-.login-form label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #495057;
-}
-
-.login-form input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e9ecef;
-    border-radius: 10px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.login-form input:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.login-btn {
-    background: linear-gradient(145deg, #667eea, #764ba2);
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
-}
-
-/* 관리자 설정 스타일 */
-.settings-section {
-    margin-bottom: 30px;
-    padding: 25px;
-    background: #f8f9fa;
-    border-radius: 15px;
-    border-left: 5px solid #667eea;
-}
-
-.settings-section h3 {
-    color: #667eea;
-    font-size: 1.3rem;
-    margin-bottom: 20px;
-    font-weight: 600;
-}
-
-.price-settings {
-    display: grid;
-    gap: 20px;
-}
-
-.price-item {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr auto;
-    gap: 10px;
-    align-items: center;
-    padding: 15px;
-    background: white;
-    border-radius: 10px;
-    border: 2px solid #e9ecef;
-    transition: all 0.3s ease;
-}
-
-.price-item:hover {
-    border-color: #667eea;
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
-}
-
-.price-item label {
-    font-weight: 500;
-    color: #495057;
-}
-
-.price-item input {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 0.9rem;
-}
-
-.price-item input:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.admin-management {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-}
-
-.admin-list h4, .admin-add h4 {
-    color: #495057;
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-}
-
-#adminList {
-    list-style: none;
-    background: white;
-    border-radius: 10px;
-    padding: 15px;
-    border: 2px solid #e9ecef;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-#adminList li {
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#adminList li:last-child {
-    border-bottom: none;
-}
-
-.delete-admin {
-    background: #dc3545;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: all 0.3s ease;
-}
-
-.delete-admin:hover {
-    background: #c82333;
-    transform: scale(1.05);
-}
-
-.admin-add .input-group {
-    margin-bottom: 15px;
-    display: block;
-}
-
-.admin-add label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #495057;
-}
-
-.admin-add input {
-    width: 100%;
-    padding: 8px 12px;
-    border: 2px solid #e9ecef;
-    border-radius: 8px;
-    font-size: 0.9rem;
-}
-
-.admin-add input:focus {
-    outline: none;
-    border-color: #667eea;
-}
-
-.add-btn {
-    background: linear-gradient(145deg, #28a745, #20c997);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-}
-
-.add-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-}
-
-.settings-actions {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 30px;
-}
-
-.save-btn {
-    background: linear-gradient(145deg, #007bff, #0056b3);
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.save-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
-}
-
-.logout-btn {
-    background: linear-gradient(145deg, #6c757d, #5a6268);
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.logout-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3);
-}
-
-/* 반응형 디자인 */
-@media (max-width: 768px) {
-    .container {
-        padding: 10px;
+// 로컬 스토리지에서 데이터 로드
+function loadData() {
+    const savedItemData = localStorage.getItem('interiorItemData');
+    const savedAdminAccounts = localStorage.getItem('interiorAdminAccounts');
+    
+    if (savedItemData) {
+        itemData = JSON.parse(savedItemData);
     }
     
-    h1 {
-        font-size: 2rem;
+    if (savedAdminAccounts) {
+        adminAccounts = JSON.parse(savedAdminAccounts);
     }
     
-    .admin-btn {
-        position: static;
-        margin-top: 15px;
-    }
+    updatePriceDisplay();
+}
+
+// 로컬 스토리지에 데이터 저장
+function saveData() {
+    localStorage.setItem('interiorItemData', JSON.stringify(itemData));
+    localStorage.setItem('interiorAdminAccounts', JSON.stringify(adminAccounts));
+}
+
+// 가격 표시 업데이트
+function updatePriceDisplay() {
+    document.getElementById('floorPricePerUnit').textContent = `${itemData.floor.price.toLocaleString()}원/${itemData.floor.unit}`;
+    document.getElementById('wallPricePerUnit').textContent = `${itemData.wall.price.toLocaleString()}원/${itemData.wall.unit}`;
+    document.getElementById('tilePricePerUnit').textContent = `${itemData.tile.price.toLocaleString()}원/${itemData.tile.unit}`;
+    document.getElementById('paintPricePerUnit').textContent = `${itemData.paint.price.toLocaleString()}원/${itemData.paint.unit}`;
+    document.getElementById('windowPricePerUnit').textContent = `${itemData.window.price.toLocaleString()}원/${itemData.window.unit}`;
+    document.getElementById('islandPricePerUnit').textContent = `${itemData.island.price.toLocaleString()}원/${itemData.island.unit}`;
+    document.getElementById('electricPricePerUnit').textContent = `${itemData.electric.price.toLocaleString()}원/${itemData.electric.unit}`;
     
-    .calculator-section {
-        padding: 20px;
-    }
+    // 항목 이름 업데이트
+    const itemGroups = document.querySelectorAll('.item-group h3');
+    itemGroups[0].textContent = itemData.floor.name;
+    itemGroups[1].textContent = itemData.wall.name;
+    itemGroups[2].textContent = itemData.tile.name;
+    itemGroups[3].textContent = itemData.paint.name;
+    itemGroups[4].textContent = itemData.window.name;
+    itemGroups[5].textContent = itemData.island.name;
+    itemGroups[6].textContent = itemData.electric.name;
+}
+
+// 견적 계산
+function calculateTotal() {
+    const floorArea = parseFloat(document.getElementById('floorArea').value) || 0;
+    const wallArea = parseFloat(document.getElementById('wallArea').value) || 0;
+    const tileArea = parseFloat(document.getElementById('tileArea').value) || 0;
+    const paintArea = parseFloat(document.getElementById('paintArea').value) || 0;
+    const windowCount = parseInt(document.getElementById('windowCount').value) || 0;
+    const islandDays = parseInt(document.getElementById('islandDays').value) || 0;
+    const electricArea = parseFloat(document.getElementById('electricArea').value) || 0;
     
-    .item-group {
-        padding: 15px;
-    }
+    const total = 
+        (floorArea * itemData.floor.price) +
+        (wallArea * itemData.wall.price) +
+        (tileArea * itemData.tile.price) +
+        (paintArea * itemData.paint.price) +
+        (windowCount * itemData.window.price) +
+        (islandDays * itemData.island.price) +
+        (electricArea * itemData.electric.price);
     
-    .input-group {
-        flex-direction: column;
-        align-items: stretch;
-    }
+    document.getElementById('totalPrice').textContent = `${total.toLocaleString()}원`;
     
-    .input-group label {
-        min-width: auto;
-    }
+    // 계산 애니메이션
+    const totalElement = document.getElementById('totalPrice');
+    totalElement.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+        totalElement.style.transform = 'scale(1)';
+    }, 200);
+}
+
+// 관리자 로그인
+function adminLogin() {
+    const inputId = document.getElementById('adminId').value;
+    const inputPassword = document.getElementById('adminPassword').value;
     
-    .price-item {
-        grid-template-columns: 1fr;
-        gap: 5px;
-    }
+    const validAdmin = adminAccounts.find(admin => 
+        admin.id === inputId && admin.password === inputPassword
+    );
     
-    .admin-management {
-        grid-template-columns: 1fr;
-    }
-    
-    .settings-actions {
-        flex-direction: column;
-    }
-    
-    .modal-content {
-        margin: 10% auto;
-        width: 95%;
+    if (validAdmin) {
+        isLoggedIn = true;
+        document.getElementById('adminModal').style.display = 'none';
+        openAdminSettings();
+        
+        // 입력 필드 초기화
+        document.getElementById('adminId').value = '';
+        document.getElementById('adminPassword').value = '';
+    } else {
+        alert('아이디 또는 비밀번호가 올바르지 않습니다.');
     }
 }
 
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.5rem;
+// 관리자 설정 모달 오픈
+function openAdminSettings() {
+    // 현재 설정값으로 폼 초기화
+    document.getElementById('floorName').value = itemData.floor.name;
+    document.getElementById('floorPrice').value = itemData.floor.price;
+    document.getElementById('wallName').value = itemData.wall.name;
+    document.getElementById('wallPrice').value = itemData.wall.price;
+    document.getElementById('tileName').value = itemData.tile.name;
+    document.getElementById('tilePrice').value = itemData.tile.price;
+    document.getElementById('paintName').value = itemData.paint.name;
+    document.getElementById('paintPrice').value = itemData.paint.price;
+    document.getElementById('windowName').value = itemData.window.name;
+    document.getElementById('windowPrice').value = itemData.window.price;
+    document.getElementById('islandName').value = itemData.island.name;
+    document.getElementById('islandPrice').value = itemData.island.price;
+    document.getElementById('electricName').value = itemData.electric.name;
+    document.getElementById('electricPrice').value = itemData.electric.price;
+    
+    updateAdminList();
+    document.getElementById('adminSettingsModal').style.display = 'block';
+}
+
+// 관리자 목록 업데이트
+function updateAdminList() {
+    const adminList = document.getElementById('adminList');
+    adminList.innerHTML = '';
+    
+    adminAccounts.forEach((admin, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <span>${admin.id}</span>
+            <button class="delete-admin" onclick="deleteAdmin(${index})">삭제</button>
+        `;
+        adminList.appendChild(li);
+    });
+}
+
+// 관리자 추가
+function addAdmin() {
+    const newId = document.getElementById('newAdminId').value.trim();
+    const newPassword = document.getElementById('newAdminPassword').value.trim();
+    
+    if (!newId || !newPassword) {
+        alert('아이디와 비밀번호를 입력해주세요.');
+        return;
     }
     
-    .total-section h2 {
-        font-size: 1.5rem;
+    if (adminAccounts.find(admin => admin.id === newId)) {
+        alert('이미 존재하는 아이디입니다.');
+        return;
     }
     
-    .modal-body {
-        padding: 20px;
+    adminAccounts.push({ id: newId, password: newPassword });
+    
+    // 입력 필드 초기화
+    document.getElementById('newAdminId').value = '';
+    document.getElementById('newAdminPassword').value = '';
+    
+    updateAdminList();
+    alert('관리자가 추가되었습니다.');
+}
+
+// 관리자 삭제
+function deleteAdmin(index) {
+    if (adminAccounts.length <= 1) {
+        alert('최소 1명의 관리자는 유지되어야 합니다.');
+        return;
+    }
+    
+    if (confirm('정말로 이 관리자를 삭제하시겠습니까?')) {
+        adminAccounts.splice(index, 1);
+        updateAdminList();
+        alert('관리자가 삭제되었습니다.');
+    }
+}
+
+// 설정 저장
+function saveSettings() {
+    // 항목 이름 및 가격 업데이트
+    itemData.floor.name = document.getElementById('floorName').value;
+    itemData.floor.price = parseInt(document.getElementById('floorPrice').value);
+    itemData.wall.name = document.getElementById('wallName').value;
+    itemData.wall.price = parseInt(document.getElementById('wallPrice').value);
+    itemData.tile.name = document.getElementById('tileName').value;
+    itemData.tile.price = parseInt(document.getElementById('tilePrice').value);
+    itemData.paint.name = document.getElementById('paintName').value;
+    itemData.paint.price = parseInt(document.getElementById('paintPrice').value);
+    itemData.window.name = document.getElementById('windowName').value;
+    itemData.window.price = parseInt(document.getElementById('windowPrice').value);
+    itemData.island.name = document.getElementById('islandName').value;
+    itemData.island.price = parseInt(document.getElementById('islandPrice').value);
+    itemData.electric.name = document.getElementById('electricName').value;
+    itemData.electric.price = parseInt(document.getElementById('electricPrice').value);
+    
+    saveData();
+    updatePriceDisplay();
+    alert('설정이 저장되었습니다.');
+}
+
+// 로그아웃
+function logout() {
+    isLoggedIn = false;
+    document.getElementById('adminSettingsModal').style.display = 'none';
+    alert('로그아웃되었습니다.');
+}
+
+// 이벤트 리스너 설정
+document.addEventListener('DOMContentLoaded', function() {
+    loadData();
+    
+    // 관리자 모드 버튼
+    document.getElementById('adminBtn').addEventListener('click', function() {
+        document.getElementById('adminModal').style.display = 'block';
+    });
+    
+    // 견적 계산 버튼
+    document.getElementById('calculateBtn').addEventListener('click', calculateTotal);
+    
+    // 실시간 계산 (입력값 변경시)
+    const inputs = ['floorArea', 'wallArea', 'tileArea', 'paintArea', 'windowCount', 'islandDays', 'electricArea'];
+    inputs.forEach(id => {
+        document.getElementById(id).addEventListener('input', calculateTotal);
+    });
+    
+    // 로그인 버튼
+    document.getElementById('loginBtn').addEventListener('click', adminLogin);
+    
+    // 관리자 추가 버튼
+    document.getElementById('addAdminBtn').addEventListener('click', addAdmin);
+    
+    // 설정 저장 버튼
+    document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+    
+    // 로그아웃 버튼
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    
+    // 모달 닫기 버튼들
+    document.querySelectorAll('.close').forEach(closeBtn => {
+        closeBtn.addEventListener('click', function() {
+            this.closest('.modal').style.display = 'none';
+        });
+    });
+    
+    // 모달 외부 클릭시 닫기
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+    
+    // Enter 키로 로그인
+    document.getElementById('adminPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            adminLogin();
+        }
+    });
+    
+    // Enter 키로 관리자 추가
+    document.getElementById('newAdminPassword').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            addAdmin();
+        }
+    });
+});
+
     }
 }
